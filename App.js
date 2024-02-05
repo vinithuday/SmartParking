@@ -26,14 +26,27 @@ const stripePromise = loadStripe('sk_test_51Of6H3JdJTq4rwlvmBGPwi50oYx19HaSjU8bm
 const App = () => {
   const [publishableKey, setPublishableKey] = useState('');
 
-  useEffect(() => {
-    fetchPublishableKey();
-  }, []);
+  // const fetchPublishableKey = async () => {
+  //   const key = await fetchKey();
+  //   setPublishableKey(key);
+  // };
 
-  const fetchPublishableKey = async () => {
-    const key = await fetchKey();
-    setPublishableKey(key);
+  // useEffect(() => {
+  //   fetchPublishableKey();
+  // }, []);
+
+  const fetchKey = async () => {
+    try {
+      const response = await fetch('your-api-endpoint');
+      const data = await response.json();
+      return data.publishableKey;
+    } catch (error) {
+      console.error('Error fetching publishable key:', error);
+      return '';
+    }
   };
+  
+
 
   return (
     <NavigationContainer>

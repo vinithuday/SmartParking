@@ -133,12 +133,12 @@ const Map = (props) => {
         <Button title='Current Location' onPress={userLocation} />
       </View>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.ParkingLotButton}
         onPress={() => props.navigation.navigate("homepage")}
       >
         <Text style={styles.ParkingLotText}>Continue</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View style={styles.footerContainer}>
         <Footer />
       </View>
