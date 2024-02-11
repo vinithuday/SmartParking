@@ -1,4 +1,3 @@
-
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
@@ -20,7 +19,8 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Password and confirm password do not match' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // You can adjust the salt rounds
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
       email,
@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
     return res.status(201).json({ message: 'Registration successful' });
   } catch (error) {
     console.error('Error during registration:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error during registration' });
   }
 });
 
@@ -61,3 +61,7 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+

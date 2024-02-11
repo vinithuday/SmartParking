@@ -56,7 +56,7 @@ const App = () => {
         urlScheme="your-url-scheme" 
       >
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="login" component={LoginScreen} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="signup" component={SignupScreen} />
           <Stack.Screen name="forgotpassword" component={ForgotPassword} />
           <Stack.Screen name="homepage" component={Homepage} />
