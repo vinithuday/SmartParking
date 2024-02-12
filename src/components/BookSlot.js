@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -9,15 +10,20 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { format, parseISO, differenceInMinutes } from 'date-fns';  
 import Header from "./Header";
 import Footer from "./Footer";
 
 const BookSlot = () => {
   const [searchText, setSearchText] = useState("");
   const [chosenDate, setChosenDate] = useState(new Date());
-  const [chosenTime, setChosenTime] = useState("");
+  const [arrivalTime, setArrivalTime] = useState("");
+  const [departureTime, setDepartureTime] = useState("");
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-  const [isTimePickerVisible, setTimePickerVisible] = useState(false);
+  const [isArrivalTimePickerVisible, setArrivalTimePickerVisible] = useState(false);
+  const [isDepartureTimePickerVisible, setDepartureTimePickerVisible] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const pricePerHour = 10;
   const navigation = useNavigation();
   const route = useRoute();
   const { slot } = route.params;
@@ -30,21 +36,60 @@ const BookSlot = () => {
   const maxSelectableDate = new Date();
   maxSelectableDate.setDate(currentDate.getDate() + 5);
 
+  const handleDateConfirm = (date) => {
+    const selectedDateTime = new Date(date);
+
+    // Format the date to YYYY-MM-DD
+    const formattedDate = format(selectedDateTime, 'yyyy-MM-dd');
+
+    setChosenDate(selectedDateTime);
+    hideDatePicker();
+    hideArrivalTimePicker();
+    hideDepartureTimePicker();
+    setTimeout(() => {
+      showTimePicker();
+    }, 1);
+  };
+
+  const handleArrivalTimeConfirm = (time) => {
+    const formattedTime = format(time, 'HH:mm:ss'); 
+    setArrivalTime(formattedTime);
+    hideArrivalTimePicker();
+    setDepartureTimePickerVisible(true);
+  };
+
+  const handleDepartureTimeConfirm = (time) => {
+    const formattedTime = format(time, 'HH:mm:ss'); 
+    setDepartureTime(formattedTime);
+
+    const arrivalDateTime = parseISO(`${format(chosenDate, 'yyyy-MM-dd')}T${arrivalTime}`);
+    const departureDateTime = parseISO(`${format(chosenDate, 'yyyy-MM-dd')}T${formattedTime}`);
+    const differenceInMinutesValue = differenceInMinutes(departureDateTime, arrivalDateTime);
+
+    const totalPriceValue = Math.ceil(differenceInMinutesValue / 60) * pricePerHour;
+    setTotalPrice(totalPriceValue);
+    hideDepartureTimePicker();
+  };
+
   const handleQRCodePress = () => {
-    if (!chosenDate || chosenTime === "") {
+    console.log(chosenDate, arrivalTime, departureTime, totalPrice);
+
+    if (!chosenDate || arrivalTime === "" || departureTime === "") {
       Alert.alert(
         "Validation Error",
         "Please fill in all the details (date and time) before booking the slot."
       );
     } else if (chosenDate < currentDate) {
       Alert.alert("Validation Error", "Please select a future date.");
+    } else if (arrivalTime >= departureTime) {
+      Alert.alert("Validation Error", "Please select a future time.");
     } else if (chosenDate > maxSelectableDate) {
       Alert.alert(
         "Validation Error",
         "Please select a date within the next 5 days."
       );
     } else {
-      const qrCodeValue = generateQrCodeValue(chosenDate, chosenTime);
+      const qrCodeValue = generateQrCodeValue(chosenDate, arrivalTime);
       if (qrCodeValue) {
         console.log("Generated QR Code Value:", qrCodeValue);
         navigation.navigate("qrcode");
@@ -63,50 +108,25 @@ const BookSlot = () => {
   };
 
   const showTimePicker = () => {
-    setTimePickerVisible(true);
+    setArrivalTimePickerVisible(true);
   };
 
-  const hideTimePicker = () => {
-    setTimePickerVisible(false);
+  const hideArrivalTimePicker = () => {
+    setArrivalTimePickerVisible(false);
+    setDepartureTimePickerVisible(true);
   };
 
-
-const handleDateConfirm = (date) => {
-    const selectedDateTime = new Date(date);
-    const currentDateTime = new Date();
-  
-    if (selectedDateTime <= currentDateTime) {
-      alert("Please select a date and time in the future.");
-    } else {
-      const maxSelectableDate = new Date();
-      maxSelectableDate.setDate(currentDateTime.getDate() + 5);
-  
-      if (selectedDateTime > maxSelectableDate) {
-        alert("Please select a date within the next 5 days.");
-      } else {
-        setChosenDate(selectedDateTime);
-        hideDatePicker();
-        hideTimePicker();
-        setTimeout(() => {
-          showTimePicker();
-        }, 1);
-      }
-    }
-  };
-  
-  const handleTimeConfirm = (time) => {
-    console.log("Chosen Time:", time);
-    setChosenTime(time);
-    hideTimePicker();
+  const hideDepartureTimePicker = () => {
+    setDepartureTimePickerVisible(false);
   };
 
-  const generateQrCodeValue = (chosenDate, chosenTime) => {
-    if (!chosenDate || !chosenTime) {
+  const generateQrCodeValue = (chosenDate, arrivalTime) => {
+    if (!chosenDate || !arrivalTime) {
       console.error("Chosen date or time is not set.");
       return null;
     }
 
-    return `${chosenDate.toISOString()}_${chosenTime}`;
+    return `${chosenDate.toISOString()}_${arrivalTime}`;
   };
 
   return (
@@ -123,7 +143,7 @@ const handleDateConfirm = (date) => {
 
       <TouchableOpacity onPress={showDatePicker}>
         <Text style={styles.date}>
-          {chosenDate ? chosenDate.toLocaleDateString() : "Select date"}
+          {chosenDate ? format(chosenDate, 'yyyy-MM-dd') : "Select date"}
         </Text>
       </TouchableOpacity>
 
@@ -138,18 +158,35 @@ const handleDateConfirm = (date) => {
 
       <TouchableOpacity onPress={showTimePicker}>
         <Text style={styles.time}>
-          {chosenTime !== ""
-            ? chosenTime.toLocaleTimeString()
-            : "Select time"}
+          {arrivalTime !== ""
+            ? format(new Date(`2000-01-01T${arrivalTime}`), 'HH:mm:ss')
+            : "Arrival time"}
         </Text>
       </TouchableOpacity>
 
-      {isTimePickerVisible && (
+      {isArrivalTimePickerVisible && (
         <DateTimePickerModal
-          isVisible={isTimePickerVisible}
+          isVisible={isArrivalTimePickerVisible}
           mode="time"
-          onConfirm={handleTimeConfirm}
-          onCancel={hideTimePicker}
+          onConfirm={handleArrivalTimeConfirm}
+          onCancel={hideArrivalTimePicker}
+        />
+      )}
+
+      <TouchableOpacity onPress={showTimePicker}>
+        <Text style={styles.time}>
+          {departureTime !== ""
+            ? format(new Date(`2000-01-01T${departureTime}`), 'HH:mm:ss')
+            : "Departure time"}
+        </Text>
+      </TouchableOpacity>
+
+      {isDepartureTimePickerVisible && (
+        <DateTimePickerModal
+          isVisible={isDepartureTimePickerVisible}
+          mode="time"
+          onConfirm={handleDepartureTimeConfirm}
+          onCancel={hideDepartureTimePicker}
         />
       )}
 
@@ -160,11 +197,12 @@ const handleDateConfirm = (date) => {
         <Text style={styles.bookSlotText}>Book Slot</Text>
       </TouchableOpacity>
 
+      <Text style={styles.totalPriceText}>Total Price: ${totalPrice}</Text>
+
       <Footer />
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

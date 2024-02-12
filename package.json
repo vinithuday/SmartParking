@@ -24,6 +24,7 @@
     "axios": "^1.6.5",
     "body-parser": "^1.20.2",
     "consolidate": "^1.0.3",
+    "date-fns": "^2.30.0",
     "ejs": "^3.1.9",
     "expo": "~49.0.15",
     "expo-location": "~16.1.0",

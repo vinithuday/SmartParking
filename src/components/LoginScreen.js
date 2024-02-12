@@ -1,6 +1,5 @@
 
-
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar, Alert } from 'react-native';
 import axios from 'axios';
 import { API } from './config';
@@ -25,12 +24,14 @@ export default function LoginScreen(props) {
 
       if (response.data.message) {
         console.log('Login successful:', response.data);
-        Alert.alert('Success', 'Login Successful',[
-          {
-            text: 'OK',
-            onPress: () => navigation.navigate('map'),
-          },
-        ]);
+        console.log(email);
+        navigation.navigate('map', {email});
+        // Alert.alert('Success', 'Login Successful',[
+        //   {
+        //     text: 'OK',
+        //     onPress:() => navigation.navigate('map',{ email: emailRef.current }),
+        //   },
+        // ]);
       } else {
         Alert.alert('Error', 'Invalid login credentials. Please check your email and password.');
       }
@@ -61,6 +62,7 @@ export default function LoginScreen(props) {
           placeholder="Johnathon@gmail.com"
           value={email}
           onChangeText={(text) => setEmail(text)}
+
         />
         <TextInput
           style={styles.textInput}

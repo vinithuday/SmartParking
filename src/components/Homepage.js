@@ -1,20 +1,25 @@
+
+
 import React, { useState } from 'react';
 import { View, Image, TouchableOpacity, Text, TextInput, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Header from './Header';
 import Footer from './Footer';
 import DropdownComponent from './Dropdown';
+import { useRoute } from '@react-navigation/native';
 
-const Homepage = ({route}) => {
+const Homepage = () => {
   const [searchText, setSearchText] = useState('');
   const [selectedSpace, setSelectedSpace] = useState(null);
   const navigation = useNavigation();
-  const { location } = route.params;
+  const route = useRoute();
+  const { email,location } = route.params;
+  
 
 
   const handleBookSlotPress = (slot, event) => {
     event.persist();
-    navigation.navigate('bookslot', { slot });
+    navigation.navigate('bookslot', { email, location, slot });
   };
 
   const handleLocationPress = () => {

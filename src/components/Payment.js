@@ -1,45 +1,102 @@
 
 
-import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { CardField, useStripe } from '@stripe/stripe-react-native';
+
+
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import { useStripe, CardField } from '@stripe/stripe-react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Header from './Header';
 import Footer from './Footer';
-import { useNavigation } from '@react-navigation/native';
 
-const Payment = (props) => {
-  const { confirmPayment } = useStripe();
-  const navigation = useNavigation();
+const Payment = ({ navigation }) => {
+  const { initPaymentSheet, presentPaymentSheet, confirmPayment } = useStripe();
+  const [loading, setLoading] = useState(false);
+  const [paymentIntentClientSecret, setPaymentIntentClientSecret] = useState('');
 
-  const handlePayment = async () => {
+  const fetchPaymentSheetParams = async () => {
+    // Your code to fetch payment sheet parameters
     try {
-      const { paymentIntent, error } = await confirmPayment('client_secret', {
-        type: 'Card',
-        billingDetails: {
-          address: {
-            postalCode: '12345',
-          },
+      const response = await fetch(`${API_URL}/payment-sheet`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const { paymentIntent, ephemeralKey, customer } = await response.json();
+
+      setPaymentIntentClientSecret(paymentIntent);
+
+      return {
+        paymentIntent,
+        ephemeralKey,
+        customer,
+      };
+    } catch (error) {
+      console.error('Error fetching payment sheet params:', error);
+      throw error;
+    }
+  };
+
+  const initializePaymentSheet = async () => {
+    try {
+      const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParams();
+
+      const { error } = await initPaymentSheet({
+        merchantDisplayName: 'Example, Inc.',
+        customerId: customer,
+        customerEphemeralKeySecret: ephemeralKey,
+        paymentIntentClientSecret: paymentIntent,
+        allowsDelayedPaymentMethods: true,
+        defaultBillingDetails: {
+          name: 'Jane Doe',
         },
       });
 
       if (error) {
-        console.error(error);
-        // Handle payment error
-      } else if (paymentIntent) {
-        // Payment succeeded
-        console.log(paymentIntent);
-        // Handle successful payment
+        console.error('Error initializing payment sheet:', error);
+        throw error;
       }
+
+      setLoading(true);
     } catch (error) {
-      console.error(error);
-      // Handle unexpected errors
+      console.error('Error initializing payment sheet:', error);
     }
   };
 
-  const handlePayPalButtonClick = () => {
-    // Navigate to the PayPal screen
-    navigation.navigate('PayPalScreen');
+  const openPaymentSheet = async () => {
+    try {
+      const { error } = await presentPaymentSheet({
+        confirmPayment: async ({ paymentMethodId }) => {
+          try {
+            const { paymentIntent, error } = await confirmPayment(paymentIntentClientSecret, {
+              type: 'Card',
+              paymentMethodId,
+            });
+
+            if (error) {
+              console.error('Error confirming payment:', error);
+            } else if (paymentIntent) {
+              console.log('Payment succeeded:', paymentIntent);
+              Alert.alert('Success', 'Your order is confirmed!');
+            }
+          } catch (error) {
+            console.error('Unexpected error during payment confirmation:', error);
+          }
+        },
+      });
+
+      if (error) {
+        console.error('Error presenting payment sheet:', error);
+      }
+    } catch (error) {
+      console.error('Unexpected error during payment sheet presentation:', error);
+    }
   };
+
+  useFocusEffect(() => {
+    initializePaymentSheet();
+  });
 
   return (
     <View style={styles.container}>
@@ -68,11 +125,14 @@ const Payment = (props) => {
             console.log('focusField', focusedField);
           }}
         />
-        <TouchableOpacity style={styles.button} onPress={handlePayment}>
+        <TouchableOpacity style={styles.button} onPress={openPaymentSheet}>
           <Text style={styles.buttonText}>Pay</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}  onPress={() => props.navigation.navigate("paypalscreen")}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('PayPalScreen')}
+        >
           <Text style={styles.buttonText}>Pay with PayPal</Text>
         </TouchableOpacity>
       </View>
