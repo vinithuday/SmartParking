@@ -1,11 +1,7 @@
-
-
-
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, StatusBar } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
 import { API } from './config';
 
 export default function SignupScreen(props) {
@@ -13,6 +9,8 @@ export default function SignupScreen(props) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigation = useNavigation();
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
@@ -25,7 +23,7 @@ export default function SignupScreen(props) {
     }
 
     try {
-      const response = await axios.post(`${API}/register`, {
+      const response = await axios.post(API.signup, {
         email,
         password
       });
@@ -36,7 +34,7 @@ export default function SignupScreen(props) {
         Alert.alert('Success', 'Account created successfully.', [
           {
             text: 'OK',
-            onPress: () => navigation.navigate('map'),
+            onPress: () => navigation.navigate('map',{email}),
           },
         ]);
       }
@@ -61,9 +59,12 @@ export default function SignupScreen(props) {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Text style={styles.signupheadingText}>Create your</Text>
+      <Text style={styles.signupheading1Text}>Account</Text>
+
 
       <View style={styles.logoContainer}>
-        <Image source={require('../../assets/logo.png')} style={styles.logo} />
+        <Image source={require('../../assets/car1.png')} style={styles.logo} />
       </View>
 
       <View style={styles.inputView}>
@@ -71,8 +72,11 @@ export default function SignupScreen(props) {
           style={styles.textInput}
           placeholder="Email*"
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => setEmail(text)
+          }
         />
+        <Image style={styles.logo1} />
+
         <TextInput
           style={styles.textInput}
           placeholder="Password*"
@@ -80,13 +84,22 @@ export default function SignupScreen(props) {
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
-        <TextInput
-          style={styles.textInput}
+      
+      <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggleBtn}>
+  <Image source={showPassword ? require('../../assets/Passwordseen.png') : require('../../assets/password2.png')} style={styles.logo1} />
+</TouchableOpacity>
+        {/* <TextInput
+          style={styles.textInput1}
           placeholder="Confirm Password*"
           secureTextEntry={true}
           value={confirmPassword}
           onChangeText={(text) => setConfirmPassword(text)}
         />
+       
+       <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggleBtn}>
+  <Image source={showPassword ? require('../../assets/Passwordseen.png') : require('../../assets/password2.png')} style={styles.logo1} />
+</TouchableOpacity> */}
+
       </View>
 
       <TouchableOpacity style={styles.signupBtn} onPress={handleSignUp}>
@@ -94,12 +107,13 @@ export default function SignupScreen(props) {
       </TouchableOpacity>
 
       <View style={styles.orContainer}>
-        <Text style={styles.orText}>OR</Text>
+        <Text style={styles.orText}>----------------OR----------------</Text>
       </View>
-
       <View style={styles.login}>
         <TouchableOpacity onPress={() => props.navigation.replace('LoginScreen')}>
-          <Text style={styles.loginText}>Login</Text>
+        <Text style={styles.loginText}>Already have an Account? <Text style={styles.loginText1}>Login</Text></Text>
+          
+
         </TouchableOpacity>
       </View>
     </View>
@@ -118,33 +132,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 112,
-    height: 94,
+    width: 380, 
+    height: 175, 
+  },
+  logo1: {
+    width: 25,
+    height: 25,
+    bottom: 33,
+    left: 130,
   },
   inputView: {
     borderRadius: 30,
     width: '70%',
-    marginBottom: 20,
+    bottom: 30,
     alignItems: 'center',
   },
   textInput: {
     height: 50,
     width: '100%',
-    marginBottom: 20,
+    top: 10,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 10,
     paddingLeft: 10,
   },
+  
   login: {
     alignItems: 'center',
+    top: 25,
   },
   loginText: {
-    color: '#38447E',
+    color: '#9E9E9E',
     fontSize: 15,
   },
+  loginText1: {
+    color: '#38447E',
+    fontSize: 15,
+    textDecorationLine: 'underline' ,
+  },
   orContainer: {
-    marginVertical: 20,
+    marginVertical: 10,
+    top :20,
   },
   orText: {
     color: '#38447E',
@@ -156,10 +184,31 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    top: 8,
     backgroundColor: '#38447E',
   },
   signupText: {
     color: 'white',
+  },
+  signupheadingText:{
+    fontSize:40,
+    right: 90,
+    bottom: 25,
+    fontWeight: 'bold',
+    color: '#464646',
+
+
+  },
+  signupheading1Text:{
+    fontSize:40,
+    right: 120,
+    bottom: 30,
+    fontWeight: 'bold',
+    color: '#4595E0',
+
+  },
+  passwordToggleBtn: {
+    position: 'absolute',
+    top: 130,
   },
 });

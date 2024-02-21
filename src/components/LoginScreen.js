@@ -78,7 +78,7 @@ export default function LoginScreen(props) {
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
-                 {/* <Image source={require('../../assets/password2.png')} style={styles.logo1} /> */}
+                 
                  
                  <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggleBtn}>
   <Image source={showPassword ? require('../../assets/Passwordseen.png') : require('../../assets/password2.png')} style={styles.logo1} />
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   forgotButtonContainer: {
     width: '100%',
     alignItems: 'flex-end', 
-    top: 13,
+    top: 20,
   },
   forgotText: {
     color: '#38447E',
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   orContainer: {
     marginVertical: 10,
-    top: 10, 
+    top: 20, 
   },
   orText: {
     color: '#38447E',
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    top: 10,
+    top: 20,
     backgroundColor: "#38447E",
   },
   inputView: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
+    marginTop: 20,
     backgroundColor: "#38447E",
   },
   signupText: {
