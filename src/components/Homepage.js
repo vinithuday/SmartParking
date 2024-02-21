@@ -23,7 +23,7 @@ const Homepage = () => {
   };
 
   const handleLocationPress = () => {
-    navigation.navigate('search');
+    navigation.navigate('search',{email});
   };
 
   const renderSlot = (row, index) => {

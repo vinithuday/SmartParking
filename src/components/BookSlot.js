@@ -39,7 +39,6 @@ const BookSlot = () => {
   const handleDateConfirm = (date) => {
     const selectedDateTime = new Date(date);
 
-    // Format the date to YYYY-MM-DD
     const formattedDate = format(selectedDateTime, 'yyyy-MM-dd');
 
     setChosenDate(selectedDateTime);
@@ -92,7 +91,7 @@ const BookSlot = () => {
       const qrCodeValue = generateQrCodeValue(chosenDate, arrivalTime);
       if (qrCodeValue) {
         console.log("Generated QR Code Value:", qrCodeValue);
-        navigation.navigate("qrcode");
+        navigation.navigate("payment");
       } else {
         console.error("Failed to generate QR code value.");
       }
@@ -133,12 +132,12 @@ const BookSlot = () => {
     <View style={styles.container}>
       <Header />
 
-      <TextInput
+      {/* <TextInput
         style={styles.searchBar}
         placeholder="Search..."
         value={searchText}
         onChangeText={(text) => setSearchText(text)}
-      />
+      /> */}
       <Text style={styles.selectedSlotText}>Selected Slot: {slot}</Text>
 
       <TouchableOpacity onPress={showDatePicker}>
@@ -197,7 +196,7 @@ const BookSlot = () => {
         <Text style={styles.bookSlotText}>Book Slot</Text>
       </TouchableOpacity>
 
-      <Text style={styles.totalPriceText}>Total Price: ${totalPrice}</Text>
+      <Text style={styles.totalPriceText}>Total Price: € {totalPrice}</Text>
 
       <Footer />
     </View>
@@ -231,7 +230,7 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingLeft: 10,
     position: 'absolute',
-    top: 130,
+    top: 100,
     left: 50,
     right: 50,
     zIndex: 1,
@@ -255,12 +254,16 @@ const styles = StyleSheet.create({
   time: {
     justifyContent: "center",
     textAlign: "center",
-    marginBottom: 20,
     fontSize: 24,
     color: "#38447E",
     bottom: 80,
   },
-// });
+  totalPriceText: {
+    top: 70,
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#38447E",
+  },
 });
 
 export default BookSlot;

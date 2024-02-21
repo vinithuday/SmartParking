@@ -10,16 +10,16 @@ const User = () => {
   const navigation = useNavigation();
 
   const handlePaymentPress = () => {
-    navigation.navigate('homepage');   // should change to notfication page later
+    navigation.navigate('settings');   // should change to notfication page later
   };
   const handleHistoryPress = () => {
-    navigation.navigate('homepage');   // should change to notfication page later
+    navigation.navigate('settings');   // should change to notfication page later
   };
   const handleHowItWorksPress = () => {
-    navigation.navigate('homepage');   // should change to notfication page later
+    navigation.navigate('settings');   // should change to notfication page later
   };
   const handleSupportPress = () => {
-    navigation.navigate('homepage');   // should change to notfication page later
+    navigation.navigate('settings');   // should change to notfication page later
   };
 
   const handleSettingsPress = () => {
@@ -27,7 +27,7 @@ const User = () => {
   };
 
   const handleLogoutPress = () => {
-    navigation.navigate('login');   // should change to notfication page later
+    navigation.navigate('LoginScreen');   // should change to notfication page later
   };
 
   return (
@@ -45,7 +45,7 @@ const User = () => {
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/settings/payment.png')}
-                style={{ width: 45, height: 45 }}              />
+                style={{ width: 40, height: 40 }}              />
               <Text style={styles.userProfileText}> Payment Methods </Text>
             </View>
           </View>
@@ -58,7 +58,7 @@ const User = () => {
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/settings/history.png')}
-                style={{ width: 45, height: 45 }}              />
+                style={{ width: 40, height: 40 }}              />
               <Text style={styles.userProfileText}> Parking History </Text>
             </View>
           </View>
@@ -74,7 +74,7 @@ const User = () => {
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/settings/howItWorks.png')}
-                style={{ width: 45, height: 45 }}              />
+                style={{ width: 40, height: 40 }}              />
               <Text style={styles.userProfileText}> How it Works </Text>
             </View>
           </View>
@@ -87,7 +87,7 @@ const User = () => {
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/settings/support.png')}
-                style={{ width: 45, height: 45 }}              />
+                style={{ width: 40, height: 40 }}              />
               <Text style={styles.userProfileText}> Support </Text>
             </View>
           </View>
@@ -102,7 +102,7 @@ const User = () => {
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/settings/settings.png')}
-                style={{ width: 45, height: 45 }}              />
+                style={{ width: 40, height: 40 }}              />
               <Text style={styles.userProfileText}> Settings </Text>
             </View>
           </View>
@@ -115,7 +115,7 @@ const User = () => {
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/settings/logout.png')}
-                style={{ width: 45, height: 45 }}
+                style={{ width: 40, height: 40  }}
               />
               <Text style={styles.userProfileText}> Logout </Text>
             </View>
@@ -125,7 +125,7 @@ const User = () => {
         
     </View>
 
-    {/* <Header /> */}
+    <Header />
     <Footer />
   </View>
 
@@ -140,9 +140,10 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     userName: {
-      fontSize : 30,
+      fontSize : 20,
       fontWeight : 'bold',
       justifyContent: 'center',
+      color: '#4595E0',
     },
     row: {
       flexDirection: 'row',
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
   userProfileText: {
     marginLeft: 5, 
     marginTop: 10,
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
   },

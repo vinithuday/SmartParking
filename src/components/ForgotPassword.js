@@ -15,9 +15,11 @@ export default function ForgotPassword(props) {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Text style={styles.signupheadingText}>Forgot your Password?</Text>
+      <Text style={styles.signupheading1Text}>Dont Worry!</Text>
 
       <View style={styles.logoContainer}>
-        <Image source={require("../../assets/logo.png")} style={styles.logo} />
+        <Image source={require("../../assets/car1.png")} style={styles.logo} />
       </View>
 
       <Text style={styles.Text}>Please Enter your Email Id</Text>
@@ -25,6 +27,8 @@ export default function ForgotPassword(props) {
       <View style={styles.inputView}>
         <TextInput style={styles.textInput} placeholder="Email Id" />
       </View>
+      <Image source={require('../../assets/Messages.png')} style={styles.logo1} />
+
 
       <TouchableOpacity
         style={styles.emailButton}
@@ -36,7 +40,7 @@ export default function ForgotPassword(props) {
       </TouchableOpacity>
 
       <View style={styles.backContainer}>
-          <TouchableOpacity  onPress={() => props.navigation.replace("login")}>
+          <TouchableOpacity  onPress={() => props.navigation.replace("LoginScreen")}>
             <Text style={styles.backText}>Back</Text>
           </TouchableOpacity>
         </View>
@@ -56,8 +60,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 112,
-    height: 94,
+    width: 380, 
+    height: 175, 
+  },
+  logo1: {
+    width: 25,
+    height: 25,
+    bottom: 59,
+    left: 130,
   },
   inputView: {
     borderRadius: 30,
@@ -77,6 +87,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     fontSize: 15,
     fontStyle: "italic",
+    textDecorationLine: 'underline' ,
+    color: '#38447E',
   },
   emailButton: {
     width: "70%",
@@ -85,7 +97,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#38447E",
-    marginTop: 20,
+  bottom:20,
   },
   emailText: {
     color: "white",
@@ -93,10 +105,28 @@ const styles = StyleSheet.create({
   backContainer: {
     width: '100%',
     alignItems: 'center', 
-    marginTop: 30,
+   bottom:  1,
   },
   backText: {
     color: '#38447E',
     fontSize: 15,
+    textDecorationLine: 'underline' ,
+  },
+  signupheadingText:{
+    fontSize:30,
+    right: 55,
+    bottom:50,
+    fontWeight: 'bold',
+    
+
+  },
+  signupheading1Text:{
+    fontSize:40,
+    right: 105,
+    bottom: 40,
+    fontWeight: 'bold',
+    // color: '#38447E',
+    color: '#4595E0',
+
   },
 });

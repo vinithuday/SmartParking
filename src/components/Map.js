@@ -9,6 +9,7 @@ import axios from 'axios';
 import Footer from "./Footer";
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
+import { API } from "./config";
 
 
 
@@ -51,7 +52,7 @@ const Map = () => {
     console.log(location.coords.latitude, location.coords.longitude);
     
       try {
-        const response = await axios.get('http://192.168.0.28:3000/api/locations');
+        const response = await axios.get((`${API.mapLocations}`));
          setAdditionalMarkers(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -87,15 +88,18 @@ const Map = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
 
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search..."
-        value={searchText}
-        onChangeText={text => setSearchText(text)}
-        onSubmitEditing={handleSearch}
-      />
+<View style={styles.searchBar}>
+  <TextInput
+    style={styles.searchInput}
+    placeholder="Search here"
+    value={searchText}
+    onChangeText={text => setSearchText(text)}
+    onSubmitEditing={handleSearch}
+  />
+  <Image source={require('../../assets/mappin.png')} style={styles.logo1} />
+</View>
+                     
 
       <MapView style={styles.map} region={mapRegion}>
         {markerCoordinate && (
@@ -112,8 +116,11 @@ const Map = () => {
       </MapView>
 
       <View style={styles.buttonContainer}>
-        <Button title='Current Location' onPress={userLocation} />
-      </View>
+  <TouchableOpacity onPress={userLocation}>
+    <Image source={require('../../assets/CLocation3.png')} style={styles.currentlocation} />
+  </TouchableOpacity>
+</View>
+
 
       <View style={styles.footerContainer}>
         <Footer />
@@ -149,19 +156,37 @@ const styles = StyleSheet.create({
   ParkingLotText: {
     color: "white",
   },
+  
   searchBar: {
-    height: 45,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 8,
-    margin: 10,
-    paddingLeft: 10,
-    position: 'absolute',
-    top: 130,
-    left: 50,
-    right: 50,
-    zIndex: 1,
-    backgroundColor: 'white',
+  height: 55,
+  borderWidth: 1.5,
+  borderRadius: 15,
+  margin: 5,
+  paddingLeft: 20,
+  flexDirection: 'row',
+  backgroundColor: 'white',
+  top: 130,
+  left: 40,
+  width: '80%',
+  zIndex: 1,
+  marginTop: -60, 
+  elevation: 98, 
+  shadowColor: '#000', 
+  alignItems: 'center', 
+},
+searchInput: {
+  flex: 1, 
+},
+  logo1: {
+    width: 30,
+    height: 30,
+    right: 10,
+
+  },
+  currentlocation: {
+    width: 80,
+    height: 80,
+    top: 750,
   },
   footerContainer: {
     alignItems: 'center',

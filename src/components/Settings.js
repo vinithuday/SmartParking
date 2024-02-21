@@ -19,17 +19,17 @@ const Settings = () => {
   };
 
   const handleTermsOfUsePress = () => {
-    navigation.navigate('homepage');   // should change to notfication page later
+    navigation.navigate('user');   // should change to notfication page later
   };
 
   const handlePrivacyPolicyPress = () => {
-    navigation.navigate('homepage');   // should change to notfication page later
+    navigation.navigate('user');   // should change to notfication page later
   };
 
 
   return (
     <View style={styles.container}>
-      {/* <Header/> */}
+      <Header/>
     <Footer/>
 
       <Text style={styles.headerText}>Settings</Text>
@@ -40,7 +40,7 @@ const Settings = () => {
             <View style={styles.settingsIcon}>
               <Image
                 source={require('../../assets/settings/notifications.png')}
-                style={{ width: 50, height: 50 }}
+                style={{ width: 40, height: 40 }}
               />
               <Text style={styles.settingsText}> Notifications </Text>
             </View>
@@ -54,7 +54,7 @@ const Settings = () => {
             <View style={styles.settingsIcon}>
               <Image
                 source={require('../../assets/settings/userprofile.png')}
-                style={{ width: 50, height: 50 }}
+                style={{ width: 40, height: 40}}
               />
               <Text style={styles.settingsText}> Account </Text>
             </View>
@@ -70,7 +70,7 @@ const Settings = () => {
             <View style={styles.settingsIcon}>
               <Image
                 source={require('../../assets/settings/language.png')}
-                style={{ width: 50, height: 50 }}
+                style={{ width: 40, height: 40 }}
               />
               <Text style={styles.settingsText}> Language </Text>
             </View>
@@ -85,7 +85,7 @@ const Settings = () => {
             <View style={styles.settingsIcon}>
               <Image
                 source={require('../../assets/settings/termsOfUse.png')}
-                style={{ width: 50, height: 50 }}
+                style={{ width: 40, height: 40 }}
               />
               <Text style={styles.settingsText}> Terms of Use </Text>
             </View>
@@ -100,7 +100,7 @@ const Settings = () => {
             <View style={styles.settingsIcon}>
               <Image
                 source={require('../../assets/settings/privacyPolicy.png')}
-                style={{ width: 50, height: 50 }}
+                style={{ width: 40, height: 40}}
               />
               <Text style={styles.settingsText}> Privacy Policy </Text>
             </View>
@@ -116,16 +116,17 @@ const Settings = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffff',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
   },
   headerText: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
-        marginRight: 250,
+    justifyContent: 'center',
+    top: 10,
+     color: '#4595E0',
   },
   row: {
     flexDirection: 'row',
@@ -146,6 +147,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    top: 30,
   },
 
   settingsIcon: {
