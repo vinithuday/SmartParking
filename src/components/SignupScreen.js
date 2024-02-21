@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, StatusBar } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert,Animated, StatusBar } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { API } from './config';
@@ -11,16 +11,26 @@ export default function SignupScreen(props) {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
 
+  const carPosition = useRef(new Animated.Value(0)).current;
+
+  
+  useEffect(() => {
+    Animated.timing(carPosition, {
+      toValue: 1100,
+      duration: 9000,
+      useNativeDriver: false,
+    }).start();
+  }, []);
 
   const handleSignUp = async () => {
-    if (!email || !password || !confirmPassword) {
+    if (!email || !password ) {
       Alert.alert('Error', 'Please fill in all the details.');
       return;
     }
-    if (password !== confirmPassword) {
-      Alert.alert('Password and Confirm Password do not match.');
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   Alert.alert('Password and Confirm Password do not match.');
+    //   return;
+    // }
 
     try {
       const response = await axios.post(API.signup, {
@@ -62,10 +72,10 @@ export default function SignupScreen(props) {
       <Text style={styles.signupheadingText}>Create your</Text>
       <Text style={styles.signupheading1Text}>Account</Text>
 
-
-      <View style={styles.logoContainer}>
-        <Image source={require('../../assets/car1.png')} style={styles.logo} />
-      </View>
+<Animated.Image
+      source={require('../../assets/car1.png')}
+      style={[styles.logo, { transform: [{ translateX: carPosition }] }]}
+    />
 
       <View style={styles.inputView}>
         <TextInput
@@ -132,8 +142,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 380, 
-    height: 175, 
+    width: 420, 
+    height: 195, 
+    bottom: 30,
+    right: 400,
   },
   logo1: {
     width: 25,
