@@ -31,7 +31,7 @@ const Notification = () => {
       <Text style={styles.notificationName}> Notifications</Text>
       <View style={styles.row}>
         <TouchableOpacity onPress={handleRemindersPress}>
-          <View style={styles.squareone}>
+        <View style={styles.card}>
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/notification.png')}
@@ -43,7 +43,7 @@ const Notification = () => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleMessagesPress}>
-          <View style={styles.squareone}>
+        <View style={styles.card}>
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/Messages.png')}
@@ -98,8 +98,27 @@ const styles = StyleSheet.create({
     bottom: 70,
     color: '#4595E0',
   },
+  card: {
+    backgroundColor: '#fff',
+    width: 170,
+    height: 170,
+    margin: 10,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
   logo: {
-    bottom: 220,
+    top: 100,
     // left: 10,
     width: 250,
     height: 350,

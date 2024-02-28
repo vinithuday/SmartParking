@@ -3,21 +3,17 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; 
 
 const Footer = () => {
-  const navigation = useNavigation(); // Get the navigation object
+  const navigation = useNavigation(); 
 
-  // Handle the Settings icon press to navigate to the "Settings" screen
   const handleSettingsPress = () => {
     navigation.navigate('settings');
   };
 
-  // Handle the Home icon press to navigate to the "homepage" screen
   const handleHomePress = () => {
     navigation.navigate('map');
   };
 
-  // Handle the User Profile icon press to navigate to the "user profile" screen
   const handleUserProfilePress = () => {
-    // Replace 'userprofile' with the actual name of your user profile screen
     navigation.navigate('user');
   };
 

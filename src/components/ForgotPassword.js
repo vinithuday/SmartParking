@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Animated,
   Image,
   StatusBar,
 } from "react-native";
@@ -12,22 +13,38 @@ import {
 export default function ForgotPassword(props) {
   const [email, setEmail] = useState("");
 
+  
+  const carPosition = useRef(new Animated.Value(0)).current;
+
+  
+  useEffect(() => {
+    Animated.timing(carPosition, {
+      toValue: 1100,
+      duration: 9000,
+      useNativeDriver: false,
+    }).start();
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Text style={styles.signupheadingText}>Forgot your Password?</Text>
       <Text style={styles.signupheading1Text}>Dont Worry!</Text>
 
-      <View style={styles.logoContainer}>
+      {/* <View style={styles.logoContainer}>
         <Image source={require("../../assets/car1.png")} style={styles.logo} />
-      </View>
+      </View> */}
 
+      <Animated.Image
+      source={require('../../assets/car1.png')}
+      style={[styles.logo, { transform: [{ translateX: carPosition }] }]}
+    />
       <Text style={styles.Text}>Please Enter your Email Id</Text>
 
       <View style={styles.inputView}>
         <TextInput style={styles.textInput} placeholder="Email Id" />
       </View>
-      <Image source={require('../../assets/Messages.png')} style={styles.logo1} />
+      {/* <Image source={require('../../assets/Messages.png')} style={styles.logo1} /> */}
 
 
       <TouchableOpacity
@@ -60,8 +77,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 380, 
-    height: 175, 
+    width: 420, 
+    height: 195, 
+    bottom: 30,
+    right: 400,
   },
   logo1: {
     width: 25,
@@ -72,7 +91,7 @@ const styles = StyleSheet.create({
   inputView: {
     borderRadius: 30,
     width: "70%",
-    marginBottom: 20,
+    marginBottom: 50,
     alignItems: "center",
   },
   textInput: {

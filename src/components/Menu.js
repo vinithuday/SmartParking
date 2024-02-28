@@ -7,22 +7,46 @@ import { useNavigation } from '@react-navigation/native';
 const Menu = () => {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const rotateAnim = useRef(new Animated.Value(0)).current;
 
-  const handleRemindersPress = () => {
-    navigation.navigate('settings');
+  const handleNumberPlatePress =() => {
+    navigation.navigate('numberplate');
+  }
+  
+  const handleContactUSPress =() => {
+    navigation.navigate('contactus');
+  }
+
+  const handleFAQsPress = () => {
+    navigation.navigate('faqs');
   };
 
-  const handleMessagesPress = () => {
-    navigation.navigate('settings');
+  const handleReferAFriendPress = () => {
+    navigation.navigate('referfriendscreen');
   };
 
   useEffect(() => {
+    // Opacity animation
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 2000, 
+      duration: 2000,
       useNativeDriver: true,
     }).start();
-  }, [fadeAnim]);
+
+    Animated.loop(
+      Animated.timing(rotateAnim, {
+        toValue: 1,
+        duration: 5000, 
+        useNativeDriver: true,
+      })
+    ).start();
+  }, [fadeAnim, rotateAnim]);
+
+  // Map the animated value to rotation
+  const wheelRotation = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
@@ -30,8 +54,8 @@ const Menu = () => {
       <Text style={styles.menuName}> Menu</Text>
 
       <View style={styles.row}>
-        <TouchableOpacity onPress={handleRemindersPress}>
-          <Animated.View style={[styles.squareone, { opacity: fadeAnim }]}>
+        <TouchableOpacity onPress={handleNumberPlatePress}>
+          <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/numberPlate.png')}
@@ -42,8 +66,8 @@ const Menu = () => {
           </Animated.View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleMessagesPress}>
-          <Animated.View style={[styles.squareone, { opacity: fadeAnim }]}>
+        <TouchableOpacity onPress={handleContactUSPress}>
+          <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/contactUs.png')}
@@ -56,8 +80,8 @@ const Menu = () => {
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity onPress={handleRemindersPress}>
-          <Animated.View style={[styles.squareone, { opacity: fadeAnim }]}>
+        <TouchableOpacity onPress={handleFAQsPress}>
+          <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/notification.png')}
@@ -68,8 +92,8 @@ const Menu = () => {
           </Animated.View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleMessagesPress}>
-          <Animated.View style={[styles.squareone, { opacity: fadeAnim }]}>
+        <TouchableOpacity onPress={handleReferAFriendPress}>
+          <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.userProfileIcon}>
               <Image
                 source={require('../../assets/Messages.png')}
@@ -82,8 +106,8 @@ const Menu = () => {
       </View>
 
       <Animated.Image
-        source={require('../../assets/menuCar.png')}
-        style={[styles.logo, { opacity: fadeAnim }]}
+        source={require('../../assets/wheel.png')}
+        style={[styles.logo, { opacity: fadeAnim, transform: [{ rotate: wheelRotation }] }]}
       />
 
       <Footer />
@@ -98,16 +122,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  squareone: {
-    backgroundColor: '#ffff',
+  card: {
+    backgroundColor: '#fff',
     width: 170,
     height: 170,
     margin: 10,
-    borderColor: 'rgba(128, 128, 128, 0.5)',
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     justifyContent: 'center',
     top: 30,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 
   row: {
@@ -117,7 +149,7 @@ const styles = StyleSheet.create({
   logo: {
     top: 60,
     width: 250,
-    height: 310,
+    height: 250,
   },
 
   userProfileText: {

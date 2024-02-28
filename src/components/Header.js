@@ -57,8 +57,5 @@ header: {
     marginLeft: 20, 
   },
 });
-
-
-
 export default Header;
 

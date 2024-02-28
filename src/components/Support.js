@@ -1,0 +1,135 @@
+// import React from 'react';
+// import Header from "./Header";
+// import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+// import Footer from "./Footer";
+
+// const Support = () => {
+//   return (
+//     <View style={styles.container}>
+//       <Header />
+//       <View style={styles.cardContainer}>
+//         <Text style={styles.cardTitle}>How It Works</Text>
+//         <Text style={styles.cardContent}>
+//         Welcome to Smart Parking!{"\n\n"}
+//           Our application is designed to make your parking experience hassle-free. Here's how it works:{"\n\n"}
+//           1. **Select Your Preferred Space**: Choose your preferred parking level and space from the available options.{"\n\n"}
+//           2. **Book Your Slot**: Once you've selected your space, book it by tapping on the corresponding slot.{"\n\n"}
+//           3. **Park Your Vehicle**: Head to your booked space and park your vehicle securely.{"\n\n"}
+//           4. **Additional Information**: Find important information about the parking area, such as rules and regulations, in the app.{"\n\n"}
+//           5. **Enjoy Your Parking Experience**: Relax and enjoy a stress-free parking experience with Smart Parking!{"\n\n"}
+//           Thank you for using our service. We aim to provide a seamless and efficient parking solution for you.
+//         </Text>
+//       </View>
+//       <Footer />
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//     backgroundColor: "#ffff",
+//   },
+//   cardContainer: {
+//     backgroundColor: "#ddd",
+//     borderRadius: 10,
+//     padding: 16,
+//     marginTop: 40,
+//     width: "80%",
+//   },
+//   cardTitle: {
+//     fontSize: 18,
+//     fontWeight: "bold",
+//     color: "#38447E",
+//     marginBottom: 10,
+//   },
+//   cardContent: {
+//     fontSize: 14,
+//     color: "#38447E",
+//   },
+// });
+
+// export default Support;
+import React from 'react';
+import Header from "./Header";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import Footer from "./Footer";
+
+const Support = () => {
+  const handleContactSupport = () => {
+   
+  };
+
+  const handleFAQs = () => {
+ 
+  };
+
+  return (
+    <View style={styles.container}>
+      <Header />
+      <Text style={styles.title}> Support </Text>
+
+      <View style={styles.cardContainer}>
+        <Text style={styles.cardContent}>
+          Welcome to Smart Parking! If you encounter any issues or need assistance, here are some ways we can help you:
+
+          {"\n\n"}
+          1. **Contact Support**: Reach out to our customer support team for personalized assistance.{"\n\n"}
+          <TouchableOpacity onPress={handleContactSupport}>
+            <Text style={styles.linkText}>Contact Support</Text>
+          </TouchableOpacity>
+
+          {"\n\n"}
+          2. **FAQs (Frequently Asked Questions)**: Explore our FAQs for quick answers to common queries.{"\n\n"}
+          <TouchableOpacity onPress={handleFAQs}>
+            <Text style={styles.linkText}>FAQs</Text>
+          </TouchableOpacity>
+
+          {"\n\n"}
+          3. **In-App Help Center**: Access our in-app help center for step-by-step guides and tutorials.{"\n\n"}
+          4. **Community Forum**: Join our community forum to connect with other users and share experiences.{"\n\n"}
+
+          We are here to ensure you have the best experience with Smart Parking. Thank you for choosing our service!
+        </Text>
+      </View>
+      <Footer />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffff",
+  },
+  cardContainer: {
+    backgroundColor: "#ddd",
+    borderRadius: 10,
+    padding: 16,
+    marginTop: 40,
+    width: "80%",
+    bottom: 100,
+  },
+ 
+  cardContent: {
+    fontSize: 14,
+    color: "#38447E",
+  },
+  linkText: {
+    color: "#0066CC", 
+    textDecorationLine: "underline",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    color: '#4595E0',
+    bottom: 110, 
+  },
+});
+
+export default Support;

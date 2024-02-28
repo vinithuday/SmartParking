@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StripeProvider } from '@stripe/stripe-react-native';
-import { Elements } from '@stripe/react-stripe-js';
+import { API } from "./src/components/config";
 import { loadStripe } from '@stripe/stripe-js';
 
 import LoginScreen from "./src/components/LoginScreen";
@@ -19,42 +19,87 @@ import BookSlot from "./src/components/BookSlot";
 import Map from "./src/components/Map";
 import Payment from "./src/components/Payment";
 import PayPalScreen from "./src/components/PayPalScreen";
+import HowItWorks from "./src/components/HowItWorks";
+import Support from "./src/components/Support";
+import LanguageSelection from "./src/components/Language";
+import TermsOfUse from "./src/components/TermsOfUse";
+import PrivacyPolicy from "./src/components/PrivacyPolicy";
+import FAQs from "./src/components/FAQs";
+import ContactUs from "./src/components/ContactUs";
+import NumberPlate from "./src/components/NumberPlate";
+import ReferFriendScreen from "./src/components/ReferFriendScreen";
+import * as SecureStore from 'expo-secure-store';
+import axios from "axios";
 
 const Stack = createStackNavigator();
-const stripePromise = loadStripe('sk_test_51Of6H3JdJTq4rwlvmBGPwi50oYx19HaSjU8bmDf6B9PZwIDF489MHOL9FMNMyfLs6bCDsKyoCa30RSCnFwBKeMoX00EFDOdXJs');
+// const stripePromise = loadStripe('sk_test_51Of6H3JdJTq4rwlvmBGPwi50oYx19HaSjU8bmDf6B9PZwIDF489MHOL9FMNMyfLs6bCDsKyoCa30RSCnFwBKeMoX00EFDOdXJs');
 
 const App = () => {
   const [publishableKey, setPublishableKey] = useState('');
 
-  // const fetchPublishableKey = async () => {
-  //   const key = await fetchKey();
-  //   setPublishableKey(key);
-  // };
-
-  // useEffect(() => {
-  //   fetchPublishableKey();
-  // }, []);
-
-  const fetchKey = async () => {
+  const getJwtToken = async () => {
     try {
-      const response = await fetch('your-api-endpoint');
-      const data = await response.json();
-      return data.publishableKey;
+      const jwtToken = await SecureStore.getItemAsync('jwtToken');
+      if (jwtToken) {
+        return jwtToken;
+      } else {
+        console.log('No JWT token stored');
+        // Return a default value or throw an error as needed
+        return null;
+      }
     } catch (error) {
-      console.error('Error fetching publishable key:', error);
-      return '';
+      console.error('Error retrieving JWT token:', error);
+      // Throw an error or return a default value
+      throw error;
     }
   };
-  
+  const sessionAuthentication = async () => {
+    try {
+      const jwtToken = await getJwtToken();
+      console.log('JWT Token:', jwtToken); // Log the retrieved token for debugging
 
+      if (jwtToken) {
+        const response = await axios.post(API.authentication, {
+          jwt: jwtToken
+        });
+
+        console.log('Authentication response:', response.data);
+
+        if (response.data.message) {
+          console.log('Authentication successful');
+        } else {
+          Alert.alert('Error', 'Invalid login credentials. Please check your email and password.');
+        }
+      } else {
+        console.log('JWT token not available');
+        // Handle the case where JWT token is not available (maybe redirect to login screen)
+      }
+    } catch (error) {
+      console.error('Error in sessionAuthentication:', error);
+      throw error; // Ensure to throw the error to be caught in the calling function
+    }
+  };
+
+  useEffect(() => {
+    const authenticateSession = async () => {
+      try {
+        await sessionAuthentication();
+      } catch (error) {
+        console.error('Error in sessionAuthentication:', error);
+      }
+    };
+  
+    authenticateSession();
+  }, []);
 
   return (
     <NavigationContainer>
       <StripeProvider
-        publishableKey={publishableKey}
+        publishableKey="pk_test_51Of6H3JdJTq4rwlvgr7ZKl9zgO3Yb9BsHXsulD3Rm8EfttFTYQJ3PGY5OEAd9wrnfealZRR59RDELocfqtPmufcV005iOZ9Ioz"
         merchantIdentifier="merchant.identifier" 
         urlScheme="your-url-scheme" 
       >
+        
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="signup" component={SignupScreen} />
@@ -68,8 +113,23 @@ const App = () => {
           <Stack.Screen name="parkinglot" component={ParkingLot} />
           <Stack.Screen name="bookslot" component={BookSlot} />
           <Stack.Screen name="map" component={Map} />
-          <Stack.Screen name="payment" component={Payment} />
+          <Stack.Screen name="Payment" component={Payment} />
           <Stack.Screen name="paypalscreen" component={PayPalScreen} />
+          <Stack.Screen name="howitworks" component={HowItWorks} />
+          <Stack.Screen name="support" component={Support} />
+          <Stack.Screen name="languageselection" component={LanguageSelection} />
+          <Stack.Screen name="termsofuse" component={TermsOfUse} />
+          <Stack.Screen name="privacypolicy" component={PrivacyPolicy} />
+          <Stack.Screen name="faqs" component={FAQs} />
+          <Stack.Screen name="contactus" component={ContactUs} />
+          <Stack.Screen name="numberplate" component={NumberPlate} />
+          <Stack.Screen name="referfriendscreen" component={ReferFriendScreen} />
+
+
+
+
+
+          
         </Stack.Navigator>
       </StripeProvider>
     </NavigationContainer>

@@ -1,39 +1,39 @@
-
-
-import React, { useState } from 'react';
-import { View, Image, TouchableOpacity, Text, TextInput, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import Header from './Header';
-import Footer from './Footer';
-import DropdownComponent from './Dropdown';
-import { useRoute } from '@react-navigation/native';
+import React, { useState } from "react";
+import { View, Image, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Header from "./Header";
+import Footer from "./Footer";
+import { useRoute } from "@react-navigation/native";
 
 const Homepage = () => {
-  const [searchText, setSearchText] = useState('');
-  const [selectedSpace, setSelectedSpace] = useState(null);
   const navigation = useNavigation();
   const route = useRoute();
-  const { email,location } = route.params;
-  
+  const { email, location } = route.params;
 
+  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedButton, setSelectedButton] = useState(null);
 
   const handleBookSlotPress = (slot, event) => {
     event.persist();
-    navigation.navigate('bookslot', { email, location, slot });
+    navigation.navigate("bookslot", { email, location, slot, selectedLevel });
   };
 
-  const handleLocationPress = () => {
-    navigation.navigate('search',{email});
-  };
-
-  const renderSlot = (row, index) => {
-    const slotName = `${index + 1}${String.fromCharCode(65 + row)}`;
+ 
+  const renderSlot = (row, col) => {
+    const levelStart = selectedLevel === "Level1" ? 0 : selectedLevel === "Level2" ? 4 : 8;
+    const slotName = `${row + levelStart + 1}${String.fromCharCode(65 + col)}`;
 
     return (
-      <TouchableOpacity key={slotName} onPress={(event) => handleBookSlotPress(slotName, event)}>
+      <TouchableOpacity
+        key={slotName}
+        onPress={(event) => handleBookSlotPress(slotName, event)}
+      >
         <View style={styles.squareone}>
           <View style={styles.carIcon}>
-            <Image source={require('../../assets/Car.png')} style={{ width: 25, height: 25 }} />
+            <Image
+              source={require("../../assets/car1.png")}
+              style={{ width: 75, height: 30, top: 15 }}
+            />
             <Text style={styles.slotText}>{slotName}</Text>
           </View>
         </View>
@@ -41,38 +41,72 @@ const Homepage = () => {
     );
   };
 
-  const renderRow = (row) => (
-    <View key={row} style={styles.row}>
-      {Array.from({ length: 7 }, (_, index) => renderSlot(row, index))}
-    </View>
-  );
+  const renderLevelGrid = () => {
+    const rows = [];
+    for (let i = 0; i < 4; i++) {
+      rows.push(
+        <View key={i} style={styles.row}>
+          {Array.from({ length: 4 }, (_, index) => renderSlot(i, index))}
+        </View>
+      );
+    }
+    return rows;
+  };
 
-  // const handleSearch = async () => {
-  // };
+  const handleLevelButtonClick = (level, buttonIndex) => {
+    setSelectedLevel(level);
+    setSelectedButton(buttonIndex);
+  };
 
   return (
     <View style={styles.container}>
       <Header />
 
-      {/* <TextInput
-        style={styles.searchBar}
-        placeholder="Search..."
-        value={searchText}
-        onChangeText={(text) => setSearchText(text)}
-        onSubmitEditing={handleSearch}
-      /> */}
+      <Text style={styles.selectSpaceText}>Select Level and Preferred Space</Text>
 
-      <Text style={styles.selectSpaceText}>Select Preferred Space</Text>
-<View style={styles.dropdown}>
-      <DropdownComponent/>
+      {renderLevelGrid()}
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedButton === 1 && { backgroundColor: "#4595E0" },
+          ]}
+          onPress={() => handleLevelButtonClick("Level1", 1)}
+        >
+          <Text style={styles.buttonText}>Level 1</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedButton === 2 && { backgroundColor: "#4595E0" },
+          ]}
+          onPress={() => handleLevelButtonClick("Level2", 2)}
+        >
+          <Text style={styles.buttonText}>Level 2</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedButton === 3 && { backgroundColor: "#4595E0" },
+          ]}
+          onPress={() => handleLevelButtonClick("Level3", 3)}
+        >
+          <Text style={styles.buttonText}>Level 3</Text>
+        </TouchableOpacity>
       </View>
 
-      {renderRow(0)}
-      {renderRow(1)}
-      {renderRow(2)}
-      {renderRow(3)}
-      {renderRow(4)}
-      {renderRow(5)}
+      <View style={styles.cardContainer}>
+        <Text style={styles.cardTitle}>Parking Information</Text>
+        <Text style={styles.cardContent}>
+        Welcome to Smart Parking!{"\n"}
+         Here are some important tips for parking your car:{"\n"}
+1. Please park only in designated parking spots to ensure a smooth flow of traffic.{"\n"}
+2. Ensure your vehicle is properly aligned within the parking space.{"\n"}
+Thank you for choosing our parking service. We hope you have a pleasant experience! </Text>
+      </View>
 
       <Footer />
     </View>
@@ -82,66 +116,80 @@ const Homepage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffff',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffff",
   },
-  // searchBar: {
-  //   height: 45,
-  //   borderColor: 'gray',
-  //   borderWidth: 1,
-  //   borderRadius: 8,
-  //   margin: 10,
-  //   paddingLeft: 10,
-  //   position: 'absolute',
-  //   top: 130,
-  //   left: 50,
-  //   right: 50,
-  //   zIndex: 1,
-  //   backgroundColor: 'white',
-  // },
+ 
   selectSpaceText: {
     fontSize: 25,
-    fontWeight: 'bold',
-    color: '#38447E',
+    fontWeight: "bold",
+    color: "#38447E",
     bottom: 30,
   },
   squareone: {
-    width: 50,
-    height: 50,
+    width: 90,
+    height: 90,
     marginTop: 10,
-    borderColor: 'rgba(128, 128, 128, 0.5)',
-    borderWidth: 1,
+    marginRight: 10, 
+    borderColor: '#4595E0',
+    borderWidth: 2,
     borderRadius: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
+    top: 50,
   },
   carIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
+    // bottom: 200,
+  },
+  dropdown: {
+    height: 300,
+    left: 30,
+    width: "80%",
+  },
+
+  slotText: {
+    fontSize: 14,
+    color: "#38447E",
     marginTop: 20,
   },
-  dropdownContainer: {
-    height: 40,
-    width: '80%',
-    marginTop: 10,
+  cardContainer: {
+    backgroundColor: "#ddd",
+    borderRadius: 10,
+    padding: 16,
+    top: 40,
+    width: "80%",
   },
-  dropdownStyle: {
-    backgroundColor: '#fafafa',
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#38447E",
+    marginBottom: 20,
   },
-  dropdownItemStyle: {
-    justifyContent: 'flex-start',
+  cardContent: {
+    fontSize: 14,
+    color: "#38447E",
   },
-  dropdownLabelStyle: {
-    color: '#38447E',
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    marginTop: 20,
   },
-  slotText: {
-    fontSize: 12,
-    color: '#38447E',
-    marginTop: 5,
+  button: {
+    backgroundColor: "#4595E0",
+    backgroundColor: "#ccc",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    bottom: 430,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

@@ -38,9 +38,9 @@ const QrCode = (props) => {
       ) : (
         <Text>Loading QR code...</Text>
       )}
-      <TouchableOpacity style= {styles.paymentBtn } onPress={() => props.navigation.replace("payment")}>
+      {/* <TouchableOpacity style= {styles.paymentBtn } onPress={() => props.navigation.replace("payment")}>
         <Text style={styles.signupText} >Payment </Text> 
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Footer />
 
     </View>
@@ -73,15 +73,7 @@ const styles = StyleSheet.create({
     padding: 50,
     borderRadius: 10, 
   },
-  paymentBtn: {
-    width: "70%",
-    borderRadius: 12,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    backgroundColor: "#38447E",
-  },
+
   signupText:{
     color: "#ffff",
   }
