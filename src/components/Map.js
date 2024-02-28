@@ -16,7 +16,7 @@ import { API } from "./config";
 const Map = () => {
 
   const route = useRoute();
-  const { email } = route.params;
+  const { email } = route.params || {};
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 49.488888,
@@ -31,7 +31,7 @@ const Map = () => {
   
   const handleParkingLotPress = (marker) => {
     navigation.navigate("homepage", {
-      email: email,
+      email: email?.toString(),
       location: marker.name,
     });
   };
