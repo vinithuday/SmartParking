@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top', 
   },
   sendButton: {
-    backgroundColor: '#38447E',
+    backgroundColor: '#4595E0',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',

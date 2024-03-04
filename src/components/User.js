@@ -9,24 +9,24 @@ const User = () => {
   const navigation = useNavigation();
 
   const handlePaymentPress = () => {
-    navigation.navigate('settings'); // should change to notfication page later
+    navigation.navigate('Payment'); 
   };
   const handleHistoryPress = () => {
     navigation.navigate('settings'); // should change to notfication page later
   };
   const handleHowItWorksPress = () => {
-    navigation.navigate('howitworks'); // should change to notfication page later
+    navigation.navigate('howitworks');
   };
   const handleSupportPress = () => {
-    navigation.navigate('support'); // should change to notfication page later
+    navigation.navigate('support'); 
   };
 
   const handleSettingsPress = () => {
-    navigation.navigate('settings'); // should change to notfication page later
+    navigation.navigate('settings'); 
   };
 
   const handleLogoutPress = () => {
-    navigation.navigate('LoginScreen'); // should change to notfication page later
+    navigation.navigate('LoginScreen'); 
   };
 
   return (

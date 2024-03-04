@@ -48,6 +48,7 @@ header: {
     height: 25,
     marginTop: 90,
     marginRight: 20, 
+    tintColor: '#38447E',
   },
   notificationIcon: {
     width: 35, 
@@ -55,6 +56,7 @@ header: {
     top: 7,
     marginTop: 80,
     marginLeft: 20, 
+    tintColor: '#38447E',
   },
 });
 export default Header;

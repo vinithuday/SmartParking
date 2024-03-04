@@ -15,12 +15,12 @@ const Homepage = () => {
 
   const handleBookSlotPress = (slot, event) => {
     event.persist();
-    navigation.navigate("bookslot", { email, location, slot, selectedLevel });
+    navigation.navigate("bookslot", { email, location, slot });
   };
 
- 
   const renderSlot = (row, col) => {
-    const levelStart = selectedLevel === "Level1" ? 0 : selectedLevel === "Level2" ? 4 : 8;
+    const levelStart =
+      selectedLevel === "Level1" ? 0 : selectedLevel === "Level2" ? 4 : 8;
     const slotName = `${row + levelStart + 1}${String.fromCharCode(65 + col)}`;
 
     return (
@@ -62,7 +62,9 @@ const Homepage = () => {
     <View style={styles.container}>
       <Header />
 
-      <Text style={styles.selectSpaceText}>Select Level and Preferred Space</Text>
+      <Text style={styles.selectSpaceText}>
+        Select Level and Preferred Space
+      </Text>
 
       {renderLevelGrid()}
 
@@ -101,11 +103,15 @@ const Homepage = () => {
       <View style={styles.cardContainer}>
         <Text style={styles.cardTitle}>Parking Information</Text>
         <Text style={styles.cardContent}>
-        Welcome to Smart Parking!{"\n"}
-         Here are some important tips for parking your car:{"\n"}
-1. Please park only in designated parking spots to ensure a smooth flow of traffic.{"\n"}
-2. Ensure your vehicle is properly aligned within the parking space.{"\n"}
-Thank you for choosing our parking service. We hope you have a pleasant experience! </Text>
+          Welcome to Smart Parking!{"\n"}
+          Here are some important tips for parking your car:{"\n"}
+          1. Please park only in designated parking spots to ensure a smooth
+          flow of traffic.{"\n"}
+          2. Ensure your vehicle is properly aligned within the parking space.
+          {"\n"}
+          Thank you for choosing our parking service. We hope you have a
+          pleasant experience!{" "}
+        </Text>
       </View>
 
       <Footer />
@@ -120,22 +126,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ffff",
   },
- 
+
   selectSpaceText: {
     fontSize: 25,
     fontWeight: "bold",
-    color: "#38447E",
-    bottom: 30,
+    color: "#4595E0",
+    top: 461,
   },
   squareone: {
     width: 90,
     height: 90,
     marginTop: 10,
-    marginRight: 10, 
-    borderColor: '#4595E0',
+    marginRight: 10,
+    borderColor: "#4595E0",
     borderWidth: 2,
     borderRadius: 4,
-    top: 50,
+    top: 20,
   },
   carIcon: {
     justifyContent: "center",
@@ -145,12 +151,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     // bottom: 200,
   },
-  dropdown: {
-    height: 300,
-    left: 30,
-    width: "80%",
-  },
-
   slotText: {
     fontSize: 14,
     color: "#38447E",
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#38447E",
+    color: "#4595E0",
     marginBottom: 20,
   },
   cardContent: {
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "80%",
-    marginTop: 20,
+    bottom: 10,
   },
   button: {
     backgroundColor: "#4595E0",

@@ -23,14 +23,14 @@ export default function SignupScreen(props) {
   }, []);
 
   const handleSignUp = async () => {
-    if (!email || !password ) {
+    if (!email || !password ||!confirmPassword ) {
       Alert.alert('Error', 'Please fill in all the details.');
       return;
     }
-    // if (password !== confirmPassword) {
-    //   Alert.alert('Password and Confirm Password do not match.');
-    //   return;
-    // }
+    if (password !== confirmPassword) {
+      Alert.alert('Password and Confirm Password do not match.');
+      return;
+    }
 
     try {
       const response = await axios.post(API.signup, {
@@ -90,7 +90,7 @@ export default function SignupScreen(props) {
         <TextInput
           style={styles.textInput}
           placeholder="Password*"
-          secureTextEntry={true}
+          secureTextEntry={!showPassword}
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
@@ -98,7 +98,7 @@ export default function SignupScreen(props) {
       <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggleBtn}>
   <Image source={showPassword ? require('../../assets/Passwordseen.png') : require('../../assets/password2.png')} style={styles.logo1} />
 </TouchableOpacity>
-        {/* <TextInput
+         <TextInput
           style={styles.textInput1}
           placeholder="Confirm Password*"
           secureTextEntry={true}
@@ -108,7 +108,7 @@ export default function SignupScreen(props) {
        
        <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggleBtn}>
   <Image source={showPassword ? require('../../assets/Passwordseen.png') : require('../../assets/password2.png')} style={styles.logo1} />
-</TouchableOpacity> */}
+</TouchableOpacity> 
 
       </View>
 
@@ -168,6 +168,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 10,
   },
+  textInput1: {
+    height: 50,
+    width: '100%',
+    top: 10,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingLeft: 10,
+  },
+  
   
   login: {
     alignItems: 'center',
@@ -197,7 +207,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     top: 8,
-    backgroundColor: '#38447E',
+    backgroundColor: '#4595E0',
   },
   signupText: {
     color: 'white',

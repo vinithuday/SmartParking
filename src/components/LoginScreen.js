@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     top: 20,
-    backgroundColor: '#38447E',
+    backgroundColor: '#4595E0',
   },
   loginText: {
     color: 'white',
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#38447E',
+    backgroundColor: '#4595E0',
   },
   signupText: {
     color: 'white',

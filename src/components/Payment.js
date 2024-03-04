@@ -1,107 +1,124 @@
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
-import { useStripe, CardField } from '@stripe/stripe-react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useStripe, CardField, PaymentSheetError } from '@stripe/stripe-react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Header from './Header';
 import Footer from './Footer';
+import { API } from './config';
 
-const Payment = ({ navigation }) => {
-  const { initPaymentSheet, presentPaymentSheet, confirmPayment } = useStripe();
+const Payment = ({ route  }) => {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [paymentIntentClientSecret, setPaymentIntentClientSecret] = useState('');
+  const navigation = useNavigation();
+  const { chosenDate, arrivalTime, departureTime, totalPrice, email, location   ,selectedSlot, } = route.params;
 
-  const fetchPaymentSheetParams = async () => {
-    // Your code to fetch payment sheet parameters
-    try {
-      const response = await fetch(`${API_URL}/payment-sheet`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const { paymentIntent, ephemeralKey, customer } = await response.json();
-
-      setPaymentIntentClientSecret(paymentIntent);
-
-      return {
-        paymentIntent,
-        ephemeralKey,
-        customer,
-      };
-    } catch (error) {
-      console.error('Error fetching payment sheet params:', error);
-      throw error;
+  const confirmHandler = async (paymentMethod, shouldSavePaymentMethod, intentCreationCallback) => {
+    // Make a request to your own server, passing paymentMethod.id and shouldSavePaymentMethod.
+    // Your server creates a PaymentIntent and returns its client secret or an error message
+    const myServerResponse = await fetch(API.paymentSheet);
+    // Call the `intentCreationCallback` with the client secret or error
+    const { clientSecret, error } = await myServerResponse.json();  // Change 'response' to 'myServerResponse'
+    if (clientSecret) {
+        intentCreationCallback({ clientSecret });
+    } else {
+        intentCreationCallback({ error });
     }
+};
+
+
+  const handleQRCodePress = () => {
+    // console.log(chosenDate, arrivalTime, departureTime, totalPrice);
+
+    // if (!chosenDate || arrivalTime === "" || departureTime === "") {
+    //   Alert.alert(
+    //     "Validation Error",
+    //     "Please fill in all the details (date and time) before booking the slot."
+    //   );
+    // } else if (chosenDate < currentDate) {
+    //   Alert.alert("Validation Error", "Please select a future date.");
+    // } else if (arrivalTime >= departureTime) {
+    //   Alert.alert("Validation Error", "Please select a future time.");
+    // } else if (chosenDate > maxSelectableDate) {
+    //   Alert.alert(
+    //     "Validation Error",
+    //     "Please select a date within the next 5 days."
+    //   );
+    // } else {
+    //   const qrCodeValue = generateQrCodeValue(chosenDate, arrivalTime);
+    //   if (qrCodeValue) {
+    //     console.log("Generated QR Code Value:", qrCodeValue);
+    //     navigation.navigate("payment");
+    //   } else {
+    //     console.error("Failed to generate QR code value.");
+    //   }
+    // }
   };
 
+
   const initializePaymentSheet = async () => {
-    try {
-      const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParams();
-
-      const { error } = await initPaymentSheet({
-        merchantDisplayName: 'Example, Inc.',
-        customerId: customer,
-        customerEphemeralKeySecret: ephemeralKey,
-        paymentIntentClientSecret: paymentIntent,
-        allowsDelayedPaymentMethods: true,
-        defaultBillingDetails: {
-          name: 'Jane Doe',
+    const { error, paymentOption } = await initPaymentSheet({
+      merchantDisplayName: "Example, Inc.",
+      customFlow: true,
+      intentConfiguration: {
+        mode: {
+          amount: 1099,
+          currencyCode: 'USD',
         },
-      });
+        confirmHandler: confirmHandler, // Corrected function reference
+      },
+    });
 
-      if (error) {
-        console.error('Error initializing payment sheet:', error);
-        throw error;
-      }
-
-      setLoading(true);
-    } catch (error) {
+    if (error) {
       console.error('Error initializing payment sheet:', error);
     }
+    // Update your UI with paymentOption
   };
 
   const openPaymentSheet = async () => {
-    try {
-      const { error } = await presentPaymentSheet({
-        confirmPayment: async ({ paymentMethodId }) => {
-          try {
-            const { paymentIntent, error } = await confirmPayment(paymentIntentClientSecret, {
-              type: 'Card',
-              paymentMethodId,
-            });
+    const { error } = await presentPaymentSheet();
 
-            if (error) {
-              console.error('Error confirming payment:', error);
-            } else if (paymentIntent) {
-              console.log('Payment succeeded:', paymentIntent);
-              Alert.alert('Success', 'Your order is confirmed!');
-            }
-          } catch (error) {
-            console.error('Unexpected error during payment confirmation:', error);
-          }
-        },
-      });
-
-      if (error) {
-        console.error('Error presenting payment sheet:', error);
+    if (error) {
+      if (error.code === PaymentSheetError.Canceled) {
+        // Customer canceled - you should probably do nothing.
+      } else {
+        // PaymentSheet encountered an unrecoverable error.
+        console.error('PaymentSheet error:', error);
+        // You can display the error to the user, log it, etc.
       }
+    } else {
+      // Payment completed - show a confirmation screen.
+      console.log('Payment completed successfully');
+    }
+  };
+  const initializeAndPresentPaymentSheet = async () => {
+    try {
+      await initializePaymentSheet();
+      await openPaymentSheet();
     } catch (error) {
-      console.error('Unexpected error during payment sheet presentation:', error);
+      console.error('Error initializing or presenting payment sheet:', error);
     }
   };
 
   useFocusEffect(() => {
-    initializePaymentSheet();
+    initializeAndPresentPaymentSheet();
   });
+
+  const handlePaymentSuccess = () => {
+    // Redirect to QrCode and pass reservation details
+    navigation.replace('qrcode', {
+      qrData: { chosenDate, arrivalTime, departureTime, totalPrice, email, location,selectedSlot, 
+ },
+ 
+    });
+    
+  };
 
   return (
     <View style={styles.container}>
-      <Header />
+
       <View style={styles.paymentContainer}>
+      <Header />
         <CardField
           postalCodeEnabled={true}
           placeholders={{
@@ -115,23 +132,17 @@ const Payment = ({ navigation }) => {
           }}
           style={{
             width: '90%',
-            height: 80,
-            marginVertical: 30,
-          }}
-          onCardChange={(cardDetails) => {
-            console.log('cardDetails', cardDetails);
-          }}
-          onFocus={(focusedField) => {
-            console.log('focusField', focusedField);
+            height: 100,
+            marginVertical: 60,
           }}
         />
-        <TouchableOpacity style={styles.button} onPress={openPaymentSheet}>
-          <Text style={styles.buttonText}>Pay</Text>
-        </TouchableOpacity>
+       <TouchableOpacity style={styles.button} onPress={handlePaymentSuccess}>
+        <Text style={styles.buttonText}>Pay</Text>
+      </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('PayPalScreen')}
+          onPress={() => navigation.navigate('paypalscreen')}
         >
           <Text style={styles.buttonText}>Pay with PayPal</Text>
         </TouchableOpacity>
@@ -145,6 +156,7 @@ const Payment = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column',
     flex: 1,
     backgroundColor: '#ffff',
   },
@@ -160,12 +172,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#38447E',
+    backgroundColor: '#4595E0',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
     width: '70%',
-    borderRadius: 12,
     height: 50,
     justifyContent: 'center',
     marginTop: 10,
@@ -179,3 +190,4 @@ const styles = StyleSheet.create({
 });
 
 export default Payment;
+
