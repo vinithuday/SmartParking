@@ -8,15 +8,7 @@ import { API } from "./config";
 const QrCode = ({ route }) => {
   const [qrValue, setQrValue] = useState("");
   const { qrData } = route.params;
-  const {
-    chosenDate,
-    arrivalTime,
-    departureTime,
-    email,
-    location,
-    totalPrice,
-    selectedSlot,
-  } = qrData;
+  const { chosenDate, arrivalTime, departureTime, email, location, totalPrice, selectedSlot } = qrData;
 
   useEffect(() => {
     generateAndSetQrCodeValue();
@@ -44,6 +36,7 @@ const QrCode = ({ route }) => {
       email,
       location,
     });
+    console.log((new Date(chosenDate).getTime()))
   };
 
   const sendReservationDetails = async (reservationDetails) => {
@@ -64,6 +57,8 @@ const QrCode = ({ route }) => {
     }
   };
 
+
+    
   return (
     <View style={styles.container}>
       <Header />
@@ -84,19 +79,17 @@ const QrCode = ({ route }) => {
       ) : (
         <Text>Loading QR code...</Text>
       )}
-      <View style={styles.cardContainer}>
-        <Text style={styles.cardTitle}>
-          Thank you for choosing Smart Parking
-        </Text>
+           <View style={styles.cardContainer}>
+        <Text style={styles.cardTitle}>Thank you for choosing Smart Parking</Text>
         <Text style={styles.cardContent}>
-          Thank you for choosing Smart Parking!{"\n"}
-          We appreciate your trust in our parking service.{"\n"}
-          If you have any questions or need assistance, feel free to ask our
-          staff.{"\n"}
-          We hope you have a wonderful day!
-        </Text>
+  Thank you for choosing Smart Parking!{"\n"}
+  We appreciate your trust in our parking service.{"\n"}
+  If you have any questions or need assistance, feel free to ask our staff.{"\n"}
+  We hope you have a wonderful day!
+</Text>
       </View>
       <Footer />
+
     </View>
   );
 };
@@ -125,7 +118,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     padding: 50,
-    borderRadius: 10,
+    borderRadius: 10, 
   },
   cardContainer: {
     backgroundColor: "#ddd",
@@ -144,9 +137,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#38447E",
   },
-  signupText: {
+  signupText:{
     color: "#ffff",
-  },
+  }
 });
 
 export default QrCode;

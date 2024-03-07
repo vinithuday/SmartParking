@@ -1,71 +1,71 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
+import React, { useState } from 'react';
+import { View, Image, StyleSheet,Text,  TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Footer = () => {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
+  const [activeTab, setActiveTab] = useState('home');
 
-  const handleSettingsPress = () => {
-    navigation.navigate('settings');
+  const handleTabPress = (tab) => {
+    navigation.navigate(tab);
+    setActiveTab(tab);
   };
 
-  const handleHomePress = () => {
-    navigation.navigate('map');
-  };
-
-  const handleUserProfilePress = () => {
-    navigation.navigate('user');
-  };
+  const getIconStyle = (tab) => ({
+    ...styles.icon,
+    ...(activeTab === tab ? styles.activeIcon : {}),
+  });
 
   return (
     <View style={styles.footer}>
-      <TouchableOpacity style={styles.iconContainer} onPress={handleSettingsPress}>
-        <Image source={require('../../assets/settings.png')} style={styles.settingsIcon} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.iconContainer} onPress={handleHomePress}>
-        <Image source={require('../../assets/home.png')} style={styles.homeIcon} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.iconContainer} onPress={handleUserProfilePress}>
-        <Image source={require('../../assets/userprofile.png')} style={styles.userProfileIcon} />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity style={styles.iconContainer} onPress={() => handleTabPress('settings')}>
+      <Image source={require('../../assets/settings.png')} style={getIconStyle()} />
+      <Text style={styles.iconText}>Settings</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.iconContainer} onPress={() => handleTabPress('LoginScreen')}>
+      <Image source={require('../../assets/home.png')} style={getIconStyle()} />
+      <Text style={styles.iconText}>Home</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.iconContainer} onPress={() => handleTabPress('user')}>
+      <Image source={require('../../assets/userprofile.png')} style={getIconStyle()} />
+      <Text style={styles.iconText}>User</Text>
+    </TouchableOpacity>
+  </View>
   );
 };
 
-    const styles = StyleSheet.create({
-          footer: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            height: 50,
-            position: 'absolute',
-            bottom: 5,
-            // borderColor: 'black',
-            // borderWidth: 1,
-            // borderRadius: 1,
-            // backgroundColor :'white',
-          },
-          iconContainer: {
-            flex: 1,
-            alignItems: 'center',
-            margin: 90,
-          },
-          settingsIcon: {
-            width: 40, 
-            height: 40,
-          },
-          homeIcon: {
-            width: 45, 
-            height: 45,
-          },
-          userProfileIcon: {
-            width: 40, 
-            height: 40,
-          },
-        });
+const styles = StyleSheet.create({
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#ddd',
+    height: 60,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    elevation: 5,
+  },
+  iconContainer: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
+    width: '80%',
+  },
+  icon: {
+    width: 35,
+    height: 35,
+    tintColor: '#38447E',
+    
+    
+  },
+ 
+  activeIcon: {
+    opacity: 1,
+  },
+});
 
-        export default Footer;
-
-
+export default Footer;
 

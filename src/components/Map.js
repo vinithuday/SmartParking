@@ -14,9 +14,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { API } from "./config";
 
-const Map = () => {
+const Map = (props) => {
+  console.log(props.email)
   const route = useRoute();
-  const { email } = route.params || {};
+  const  email  = props.email;
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 49.488888,

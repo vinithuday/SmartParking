@@ -1,17 +1,21 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {  useRef, useEffect, useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Animated,
   Image,
+  Animated, 
   StatusBar,
 } from "react-native";
+import { API } from './config';
+import axios from "axios";
 
-export default function ForgotPassword(props) {
-  const [email, setEmail] = useState("");
+const ForgotPassword = (props) => {
+  const [email, setEmail] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   
   const carPosition = useRef(new Animated.Value(0)).current;
@@ -25,15 +29,44 @@ export default function ForgotPassword(props) {
     }).start();
   }, []);
 
+  const handleForgotPassword = async () => {
+    try {
+      const trimmedEmail = email.trim();
+   //   console.log('Sending email:', trimmedEmail);
+      const response = await axios.post(API.forgotpassword, {
+        email: trimmedEmail 
+      });
+      if (!response.status===200) {
+        console.log(response.message)
+  
+        // try {
+        //   errorMessage = data.message || errorMessage;
+        //   console.log(res)
+        // } catch (jsonError) {
+        //   console.error('Error parsing JSON:', jsonError);
+  
+        //   // Handle non-JSON response
+        //   const nonJsonResponse = await response.text();
+        //   console.error('Non-JSON response from server:', nonJsonResponse);
+  
+        //   errorMessage = 'An unexpected error occurred. Please try again later.';
+        // }
+  
+      } else {
+        console.log(response.data)
+      }
+    } catch (error) {
+      console.error(`Error initiating password reset: ${error.message}`);
+      setErrorMessage("An unexpected error occurred. Please try again later.");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Text style={styles.signupheadingText}>Forgot your Password?</Text>
-      <Text style={styles.signupheading1Text}>Dont Worry!</Text>
+      <Text style={styles.signupheading1Text}>Don't Worry!</Text>
 
-      {/* <View style={styles.logoContainer}>
-        <Image source={require("../../assets/car1.png")} style={styles.logo} />
-      </View> */}
 
       <Animated.Image
       source={require('../../assets/car1.png')}
@@ -42,28 +75,37 @@ export default function ForgotPassword(props) {
       <Text style={styles.Text}>Please Enter your Email Id</Text>
 
       <View style={styles.inputView}>
-        <TextInput style={styles.textInput} placeholder="Email Id" />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Email Id"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
       </View>
-      {/* <Image source={require('../../assets/Messages.png')} style={styles.logo1} /> */}
 
-
-      <TouchableOpacity
-        style={styles.emailButton}
-
-        //write code for reset password
-        // onPress={() => props.navigation.replace("login")}
-      >
+      <TouchableOpacity style={styles.emailButton} onPress={handleForgotPassword}>
         <Text style={styles.emailText}>SEND EMAIL</Text>
       </TouchableOpacity>
 
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
+
+      {successMessage ? (
+        <Text style={styles.successText}>{successMessage}</Text>
+      ) : null}
+
       <View style={styles.backContainer}>
-          <TouchableOpacity  onPress={() => props.navigation.replace("LoginScreen")}>
-            <Text style={styles.backText}>Back</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => props.navigation.replace("LoginScreen")}>
+          <Text style={styles.backText}>Back</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
-}
+};
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -115,7 +157,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#38447E",
+    backgroundColor: "#4595E0",
   bottom:20,
   },
   emailText: {
@@ -148,4 +190,10 @@ const styles = StyleSheet.create({
     color: '#4595E0',
 
   },
+  successText: {
+    color: 'green',
+    marginTop: 10,
+  },
 });
+
+export default ForgotPassword;

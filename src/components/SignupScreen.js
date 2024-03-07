@@ -23,16 +23,17 @@ export default function SignupScreen(props) {
   }, []);
 
   const handleSignUp = async () => {
-    if (!email || !password ||!confirmPassword ) {
+    if (!email || !password  ) {
       Alert.alert('Error', 'Please fill in all the details.');
       return;
     }
-    if (password !== confirmPassword) {
-      Alert.alert('Password and Confirm Password do not match.');
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   Alert.alert('Password and Confirm Password do not match.');
+    //   return;
+    // }
 
     try {
+      console.log(email,   password)
       const response = await axios.post(API.signup, {
         email,
         password
@@ -44,7 +45,7 @@ export default function SignupScreen(props) {
         Alert.alert('Success', 'Account created successfully.', [
           {
             text: 'OK',
-            onPress: () => navigation.navigate('map',{email}),
+            onPress: () => navigation.navigate('LoginScreen'),
           },
         ]);
       }
@@ -98,13 +99,13 @@ export default function SignupScreen(props) {
       <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggleBtn}>
   <Image source={showPassword ? require('../../assets/Passwordseen.png') : require('../../assets/password2.png')} style={styles.logo1} />
 </TouchableOpacity>
-         <TextInput
+         {/* <TextInput
           style={styles.textInput1}
           placeholder="Confirm Password*"
           secureTextEntry={true}
           value={confirmPassword}
           onChangeText={(text) => setConfirmPassword(text)}
-        />
+        /> */}
        
        <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggleBtn}>
   <Image source={showPassword ? require('../../assets/Passwordseen.png') : require('../../assets/password2.png')} style={styles.logo1} />
@@ -120,7 +121,7 @@ export default function SignupScreen(props) {
         <Text style={styles.orText}>----------------OR----------------</Text>
       </View>
       <View style={styles.login}>
-        <TouchableOpacity onPress={() => props.navigation.replace('LoginScreen')}>
+        <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
         <Text style={styles.loginText}>Already have an Account? <Text style={styles.loginText1}>Login</Text></Text>
           
 

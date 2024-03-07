@@ -1,1 +1,12 @@
-export const API = "http://192.168.0.28:3000/api/auth/";
+export const API={main:"http://192.168.0.28:3000",
+login:"http://192.168.0.28:3000/api/auth",
+signup:"http://192.168.0.28:3000/api/users",
+mapLocations:"http://192.168.0.28:3000/api/locations",
+paymentSheet:"http://192.168.0.28:3000/api/payment",
+authentication: "http://192.168.0.28:3000/api/authentication", 
+forgotpassword: "http://192.168.0.28:4000/forgotpassword",
+resetpassword: "http://192.168.0.28:4000/resetpassword",
+userReservation:  "http://192.168.0.28:3000/api/userReservation",
+bookSlot:  "http://192.168.0.28:3000/api/bookSlot",
+jwtAuth:  "http://192.168.0.28:3000/initJwtAuth",
+}

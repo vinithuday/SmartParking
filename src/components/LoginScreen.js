@@ -6,7 +6,8 @@ import { API } from './config';
 import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 
-export default function LoginScreen(props) {
+
+const LoginScreen=(props) =>{
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
@@ -14,8 +15,9 @@ export default function LoginScreen(props) {
   const [loading, setLoading] = useState(false);
   
   const carPosition = useRef(new Animated.Value(0)).current;
-
+  // console.log("hererereerere======>"+params.route.params.setIsLoggedIn(true))
   useEffect(() => {
+
     Animated.timing(carPosition, {
       toValue: 1500,
       duration: 9000,
@@ -26,22 +28,12 @@ export default function LoginScreen(props) {
   const saveJwtToken = async (token) => {
     try {
       await SecureStore.setItemAsync('jwtToken', token);
+    
       console.log('JWT token saved successfully');
     } catch (error) {
       console.error('Error saving JWT token:', error);
     }
   };
-  
-
-  // const deleteJwtToken = async () => {
-  //   try {
-  //     await SecureStore.deleteItemAsync('jwtToken');
-  //     console.log('JWT token deleted successfully');
-  //   } catch (error) {
-  //     console.error('Error deleting JWT token:', error);
-  //   }
-  // };
-
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -56,15 +48,21 @@ export default function LoginScreen(props) {
         password,
       });
 
-      
+      // console.log("herere======>"+params.route.params.isLoggedIn)
 
       if (response.data.message) {
         saveJwtToken(response.data.data);
-        console.log(response.data.data)
-        navigation.navigate('map', { email });
-        console.log("login done "+email)
+        // console.log(response.data.data)
+        let email= response.data.email
+
+      //  console.log("======>"+params.route.params.isLoggedIn)
+      props.setIsLoggedIn(response.data.hasOwnProperty("email"))
+      props.setUserEmail(email)
+      // params.route.params.setIsLoggedIn(response.data.hasOwnProperty("email"));
+      // params.route.params.setUserEmail(email)
+      console.log("login done "+email)
       } else {
-        Alert.alert('Error', 'Invalid login credentials. Please check your email and password.');
+        Alert.alert('Errorr', 'Invalid login credentials. Please check your email and password.');
       }
     } catch (error) {
       console.error('Login failed:', error);
@@ -115,7 +113,7 @@ export default function LoginScreen(props) {
           </TouchableOpacity>
 
           <View style={styles.forgotButtonContainer}>
-            <TouchableOpacity onPress={() => props.navigation.replace('forgotpassword')}>
+            <TouchableOpacity onPress={() => navigation.navigate('forgotpassword')}>
               <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
@@ -129,7 +127,7 @@ export default function LoginScreen(props) {
           <Text style={styles.orText}>---------------OR---------------</Text>
         </View>
 
-        <TouchableOpacity style={styles.signupBtn} onPress={() => props.navigation.replace('signup')}>
+        <TouchableOpacity style={styles.signupBtn} onPress={() => navigation.navigate('signup')}>
           <Text style={styles.signupText}>SIGN UP </Text>
         </TouchableOpacity>
       </View>
@@ -247,3 +245,4 @@ const styles = StyleSheet.create({
     top: 130,
   },
 });
+export default LoginScreen;

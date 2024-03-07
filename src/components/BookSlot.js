@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -9,7 +11,7 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { format, parseISO, differenceInMinutes } from "date-fns";
+import { format, parseISO, differenceInMinutes } from 'date-fns';  
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -19,16 +21,14 @@ const BookSlot = () => {
   const [arrivalTime, setArrivalTime] = useState("");
   const [departureTime, setDepartureTime] = useState("");
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-  const [isArrivalTimePickerVisible, setArrivalTimePickerVisible] =
-    useState(false);
-  const [isDepartureTimePickerVisible, setDepartureTimePickerVisible] =
-    useState(false);
+  const [isArrivalTimePickerVisible, setArrivalTimePickerVisible] = useState(false);
+  const [isDepartureTimePickerVisible, setDepartureTimePickerVisible] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [selectedSlot, setSelectedSlot] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState(''); 
   const pricePerHour = 10;
   const navigation = useNavigation();
   const route = useRoute();
-  const { slot, email, location } = route.params;
+  const { slot , email, location} = route.params;
 
   useEffect(() => {
     console.log("Selected Slot:", email, location, slot);
@@ -41,7 +41,7 @@ const BookSlot = () => {
   const handleDateConfirm = (date) => {
     const selectedDateTime = new Date(date);
 
-    const formattedDate = format(selectedDateTime, "yyyy-MM-dd");
+    const formattedDate = format(selectedDateTime, 'yyyy-MM-dd');
 
     setChosenDate(selectedDateTime);
     hideDatePicker();
@@ -53,51 +53,37 @@ const BookSlot = () => {
   };
 
   const handleArrivalTimeConfirm = (time) => {
-    const formattedTime = format(time, "HH:mm:ss");
+    const formattedTime = format(time, 'HH:mm:ss'); 
     setArrivalTime(formattedTime);
     hideArrivalTimePicker();
     setDepartureTimePickerVisible(true);
   };
 
   const handleDepartureTimeConfirm = (time) => {
-    const formattedTime = format(time, "HH:mm:ss");
+    const formattedTime = format(time, 'HH:mm:ss'); 
     setDepartureTime(formattedTime);
 
-    const arrivalDateTime = parseISO(
-      `${format(chosenDate, "yyyy-MM-dd")}T${arrivalTime}`
-    );
-    const departureDateTime = parseISO(
-      `${format(chosenDate, "yyyy-MM-dd")}T${formattedTime}`
-    );
-    const differenceInMinutesValue = differenceInMinutes(
-      departureDateTime,
-      arrivalDateTime
-    );
+    const arrivalDateTime = parseISO(`${format(chosenDate, 'yyyy-MM-dd')}T${arrivalTime}`);
+    const departureDateTime = parseISO(`${format(chosenDate, 'yyyy-MM-dd')}T${formattedTime}`);
+    const differenceInMinutesValue = differenceInMinutes(departureDateTime, arrivalDateTime);
 
-    const totalPriceValue =
-      Math.ceil(differenceInMinutesValue / 60) * pricePerHour;
+    const totalPriceValue = Math.ceil(differenceInMinutesValue / 60) * pricePerHour;
     setTotalPrice(totalPriceValue);
     hideDepartureTimePicker();
   };
 
   const handleQRCodePress = () => {
-    console.log(
-      chosenDate,
-      arrivalTime,
-      departureTime,
-      slot,
-      email,
-      location,
-      totalPrice
-    );
+    console.log(chosenDate, arrivalTime, departureTime,slot, email, location, totalPrice);
+    console.log(new Date(chosenDate))
 
     if (!chosenDate || arrivalTime === "" || departureTime === "") {
       Alert.alert(
         "Validation Error",
         "Please fill in all the details (date and time) before booking the slot."
       );
-    } else if (chosenDate < currentDate) {
+    } else if (chosenDate <= currentDate) {
       Alert.alert("Validation Error", "Please select a future date.");
+      
     } else if (arrivalTime >= departureTime) {
       Alert.alert("Validation Error", "Please select a future time.");
     } else if (chosenDate > maxSelectableDate) {
@@ -156,12 +142,12 @@ const BookSlot = () => {
         <TouchableOpacity onPress={showDatePicker}>
           <View style={styles.card}>
             <Image
-              source={require("../../assets/calender.png")}
+              source={require('../../assets/calender.png')}
               style={styles.icon}
             />
             <Text style={styles.cardTitle}>Select Date</Text>
             <Text style={styles.cardText}>
-              {chosenDate ? format(chosenDate, "yyyy-MM-dd") : "Select date"}
+              {chosenDate ? format(chosenDate, 'yyyy-MM-dd') : "Select date"}
             </Text>
           </View>
         </TouchableOpacity>
@@ -169,13 +155,13 @@ const BookSlot = () => {
         <TouchableOpacity onPress={showTimePicker}>
           <View style={styles.card}>
             <Image
-              source={require("../../assets/Clock.png")}
+              source={require('../../assets/Clock.png')}
               style={styles.icon}
             />
             <Text style={styles.cardTitle}>Arrival Time</Text>
             <Text style={styles.cardText}>
               {arrivalTime !== ""
-                ? format(new Date(`2000-01-01T${arrivalTime}`), "HH:mm:ss")
+                ? format(new Date(`2000-01-01T${arrivalTime}`), 'HH:mm:ss')
                 : "Arrival time"}
             </Text>
           </View>
@@ -184,13 +170,13 @@ const BookSlot = () => {
         <TouchableOpacity onPress={showTimePicker}>
           <View style={styles.card}>
             <Image
-              source={require("../../assets/Clock.png")}
+              source={require('../../assets/Clock.png')}
               style={styles.icon}
             />
             <Text style={styles.cardTitle}>Departure Time</Text>
             <Text style={styles.cardText}>
               {departureTime !== ""
-                ? format(new Date(`2000-01-01T${departureTime}`), "HH:mm:ss")
+                ? format(new Date(`2000-01-01T${departureTime}`), 'HH:mm:ss')
                 : "Departure time"}
             </Text>
           </View>
@@ -248,8 +234,8 @@ const BookSlot = () => {
               arrivalTime,
               departureTime,
               totalPrice,
-              selectedSlot: slot,
-              email,
+              selectedSlot:slot, 
+              email, 
               location,
             });
           }
@@ -274,13 +260,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
     elevation: 5,
     marginBottom: 20,
     width: 150,
-    alignItems: "center",
+    alignItems: 'center',
   },
   icon: {
     width: 50,
@@ -289,22 +275,22 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#38447E",
+    fontWeight: 'bold',
+    color: '#38447E',
     marginBottom: 10,
   },
   cardText: {
     fontSize: 14,
-    color: "#38447E",
+    color: '#38447E',
   },
   bookSlotButton: {
-    width: "70%",
+    width: '70%',
     borderRadius: 12,
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     top: 30,
-    backgroundColor: "#4595E0",
+    backgroundColor: '#4595E0',
   },
   bookSlotText: {
     color: "white",
@@ -313,7 +299,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "#4595E0",
+    color: '#4595E0',
   },
   date: {
     justifyContent: "center",

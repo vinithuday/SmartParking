@@ -2,17 +2,18 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import * as SecureStore from 'expo-secure-store';
 import Header from './Header';
 import Footer from './Footer';
 
-const User = () => {
+const User = (props) => {
   const navigation = useNavigation();
 
   const handlePaymentPress = () => {
     navigation.navigate('Payment'); 
   };
   const handleHistoryPress = () => {
-    navigation.navigate('settings'); // should change to notfication page later
+    navigation.navigate('parkinghistory'); 
   };
   const handleHowItWorksPress = () => {
     navigation.navigate('howitworks');
@@ -25,7 +26,11 @@ const User = () => {
     navigation.navigate('settings'); 
   };
 
-  const handleLogoutPress = () => {
+  const handleLogoutPress =async ()  => {
+await SecureStore.deleteItemAsync("jwtToken")
+// console.log(props.isLoggedIn)
+    props.setIsLoggedIn(false)
+    props.setUserEmail("")
     navigation.navigate('LoginScreen'); 
   };
 
@@ -33,7 +38,7 @@ const User = () => {
     <View style={styles.container}>
       <View style={styles.userIcon}>
         <Image source={require('../../assets/settings/userIcon.png')} style={{ width: 95, height: 95 }} />
-        <Text style={styles.userName}> User Name</Text>
+        <Text style={styles.userName}> {props.email}</Text>
       </View>
       <View style={styles.row}>
         <TouchableOpacity onPress={handlePaymentPress}>
