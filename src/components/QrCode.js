@@ -36,7 +36,6 @@ const QrCode = ({ route }) => {
       email,
       location,
     });
-    console.log((new Date(chosenDate).getTime()))
   };
 
   const sendReservationDetails = async (reservationDetails) => {

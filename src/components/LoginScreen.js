@@ -15,7 +15,6 @@ const LoginScreen=(props) =>{
   const [loading, setLoading] = useState(false);
   
   const carPosition = useRef(new Animated.Value(0)).current;
-  // console.log("hererereerere======>"+params.route.params.setIsLoggedIn(true))
   useEffect(() => {
 
     Animated.timing(carPosition, {
@@ -48,18 +47,13 @@ const LoginScreen=(props) =>{
         password,
       });
 
-      // console.log("herere======>"+params.route.params.isLoggedIn)
 
       if (response.data.message) {
         saveJwtToken(response.data.data);
-        // console.log(response.data.data)
         let email= response.data.email
 
-      //  console.log("======>"+params.route.params.isLoggedIn)
       props.setIsLoggedIn(response.data.hasOwnProperty("email"))
       props.setUserEmail(email)
-      // params.route.params.setIsLoggedIn(response.data.hasOwnProperty("email"));
-      // params.route.params.setUserEmail(email)
       console.log("login done "+email)
       } else {
         Alert.alert('Errorr', 'Invalid login credentials. Please check your email and password.');
@@ -75,7 +69,6 @@ const LoginScreen=(props) =>{
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      {/* <Image source={require('../../assets/road2.png')} style={styles.road} /> */}
       <Animated.Image
         source={require('../../assets/LoginCar.png')}
         style={[styles.logo, { transform: [{ translateY: carPosition }] }]}
