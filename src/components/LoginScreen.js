@@ -5,14 +5,17 @@ import axios from 'axios';
 import { API } from './config';
 import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
+import { usebookingDetails } from './Context/bookingDetailsContext';
 
 
 const LoginScreen=(props) =>{
-  const [email, setEmail] = useState('');
+  // const [email1, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [enteredEmail,setEnteredEmail]=useState("")
+  const {email,emailSetter}=usebookingDetails()
   
   const carPosition = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -35,25 +38,24 @@ const LoginScreen=(props) =>{
   };
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please fill in all the details.');
+    if (!enteredEmail || !password) {
+      Alert.alert('Error', 'Please fill in all the details-----.');
       return;
     }
 
     try {
       setLoading(true); 
       const response = await axios.post(API.login, {
-        email,
+        email:enteredEmail,
         password,
       });
-
 
       if (response.data.message) {
         saveJwtToken(response.data.data);
         let email= response.data.email
 
       props.setIsLoggedIn(response.data.hasOwnProperty("email"))
-      props.setUserEmail(email)
+      emailSetter(email)
       console.log("login done "+email)
       } else {
         Alert.alert('Errorr', 'Invalid login credentials. Please check your email and password.');
@@ -85,8 +87,8 @@ const LoginScreen=(props) =>{
           <TextInput
             style={styles.textInput}
             placeholder="Johnathon@gmail.com"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
+            value={enteredEmail}
+            onChangeText={(text) => setEnteredEmail(text)}
           />
           <Image style={styles.logo1} />
 
@@ -127,6 +129,7 @@ const LoginScreen=(props) =>{
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

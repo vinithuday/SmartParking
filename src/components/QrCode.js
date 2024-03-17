@@ -4,22 +4,22 @@ import QRCode from "react-native-qrcode-svg";
 import Footer from "./Footer";
 import Header from "./Header";
 import { API } from "./config";
-
-const QrCode = ({ route }) => {
+import { usebookingDetails } from "./Context/bookingDetailsContext";
+const QrCode = () => {
   const [qrValue, setQrValue] = useState("");
-  const { qrData } = route.params;
-  const { chosenDate, arrivalTime, departureTime, email, location, totalPrice, selectedSlot } = qrData;
-
+  // const { qrData } = route.params;
+  const {  arrivalDateTime, departureTime, email, location, totalPrice, selectedSlot } = usebookingDetails();
+  
   useEffect(() => {
     generateAndSetQrCodeValue();
+
   }, []);
 
   const generateAndSetQrCodeValue = () => {
     const uniqueValue = Date.now().toString();
     setQrValue(uniqueValue);
     sendReservationDetails({
-      chosenDate,
-      arrivalTime,
+      arrivalDateTime,
       departureTime,
       totalPrice,
       selectedSlot,
@@ -28,8 +28,7 @@ const QrCode = ({ route }) => {
       location,
     });
     console.log("Reservation details:", {
-      chosenDate,
-      arrivalTime,
+      arrivalDateTime,
       departureTime,
       totalPrice,
       selectedSlot,
@@ -50,7 +49,7 @@ const QrCode = ({ route }) => {
 
       const result = await response.json();
 
-      console.log(result);
+
     } catch (error) {
       console.error("Error sending reservation details to backend:", error);
     }

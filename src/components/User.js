@@ -5,8 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import Header from './Header';
 import Footer from './Footer';
+import { usebookingDetails } from "./Context/bookingDetailsContext";
 
 const User = (props) => {
+  const {email,emailSetter}=usebookingDetails()
   const navigation = useNavigation();
 
   const handlePaymentPress = () => {
@@ -30,7 +32,7 @@ const User = (props) => {
 await SecureStore.deleteItemAsync("jwtToken")
 // console.log(props.isLoggedIn)
     props.setIsLoggedIn(false)
-    props.setUserEmail("")
+    emailSetter("")
     navigation.navigate('LoginScreen'); 
   };
 
@@ -38,7 +40,7 @@ await SecureStore.deleteItemAsync("jwtToken")
     <View style={styles.container}>
       <View style={styles.userIcon}>
         <Image source={require('../../assets/settings/userIcon.png')} style={{ width: 95, height: 95 }} />
-        <Text style={styles.userName}> {props.email}</Text>
+        <Text style={styles.userName}> {email}</Text>
       </View>
       <View style={styles.row}>
         <TouchableOpacity onPress={handlePaymentPress}>

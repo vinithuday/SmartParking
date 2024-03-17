@@ -1,22 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Image, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
 import Footer from "./Footer";
 import { useRoute } from "@react-navigation/native";
-
+import {usebookingDetails } from "./Context/bookingDetailsContext";
+import { API } from "./config";
 const Homepage = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { email, location } = route.params;
+  const { location,arrivalDateTime,departureTime,selectedSlotSetter } =usebookingDetails();
 
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
-
+  const [blockedSlots,setBlockedSlots]=useState(new Map())
   const handleBookSlotPress = (slot, event) => {
-    event.persist();
-    navigation.navigate("bookslot", { email, location, slot });
+    // event.persist();
+    selectedSlotSetter(slot)
+    navigation.navigate("Payment");
   };
+useEffect(()=>{
+  (async()=>{
+    try {
+      const response = await fetch(API.checkAvailableSlot, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({location,arrivalDateTime,departureTime}),
+      });
+
+      const result = await response.json();
+
+      let blockedSlotsIn=result.data
+      console.log(blockedSlotsIn)
+      const newBlockedSlotMap=new Map();
+
+      for(let i=0;i<blockedSlotsIn.length;i++){
+        newBlockedSlotMap.set(blockedSlotsIn[i],true)
+      }
+      setBlockedSlots(newBlockedSlotMap)
+      console.log(newBlockedSlotMap)
+    } catch (error) {
+      console.error("Error sending reservation details to backend:", error);
+    }
+  })()
+
+},[])
+useEffect(()=>{
+console.log("change")
+},[blockedSlots])
 
   const renderSlot = (row, col) => {
     const levelStart =
@@ -26,9 +59,12 @@ const Homepage = () => {
     return (
       <TouchableOpacity
         key={slotName}
+        disabled={blockedSlots.has(slotName)}
         onPress={(event) => handleBookSlotPress(slotName, event)}
       >
-        <View style={styles.squareone}>
+        <View style={
+          blockedSlots.has(slotName)?styles.blockedSquare:
+          styles.squareone}>
           <View style={styles.carIcon}>
             <Image
               source={require("../../assets/car1.png")}
@@ -46,7 +82,7 @@ const Homepage = () => {
     for (let i = 0; i < 4; i++) {
       rows.push(
         <View key={i} style={styles.row}>
-          {Array.from({ length: 4 }, (_, index) => renderSlot(i, index))}
+          {Array.from({ length:4  }, (_, index) => renderSlot(i, index))}
         </View>
       );
     }
@@ -143,6 +179,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     top: 20,
   },
+  blockedSquare:{
+    width: 90,
+    height: 90,
+    marginTop: 10,
+    marginRight: 10,
+    borderWidth: 2,
+    borderRadius: 4,
+    top: 20,
+    backgroundColor:"grey",
+    borderBlockColor:"black"
+  },
+
   carIcon: {
     justifyContent: "center",
     alignItems: "center",

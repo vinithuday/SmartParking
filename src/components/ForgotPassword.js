@@ -5,19 +5,22 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
+  Alert,
   Animated, 
   StatusBar,
 } from "react-native";
 import { API } from './config';
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native';
+
 
 const ForgotPassword = (props) => {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  
+  const navigation = useNavigation();
+
   const carPosition = useRef(new Animated.Value(0)).current;
 
   
@@ -32,32 +35,20 @@ const ForgotPassword = (props) => {
   const handleForgotPassword = async () => {
     try {
       const trimmedEmail = email.trim();
-   //   console.log('Sending email:', trimmedEmail);
       const response = await axios.post(API.forgotpassword, {
         email: trimmedEmail 
       });
       if (!response.status===200) {
         console.log(response.message)
   
-        // try {
-        //   errorMessage = data.message || errorMessage;
-        //   console.log(res)
-        // } catch (jsonError) {
-        //   console.error('Error parsing JSON:', jsonError);
-  
-        //   // Handle non-JSON response
-        //   const nonJsonResponse = await response.text();
-        //   console.error('Non-JSON response from server:', nonJsonResponse);
-  
-        //   errorMessage = 'An unexpected error occurred. Please try again later.';
-        // }
+    
   
       } else {
         console.log(response.data)
       }
     } catch (error) {
-      console.error(`Error initiating password reset: ${error.message}`);
-      setErrorMessage("An unexpected error occurred. Please try again later.");
+
+      Alert.alert("Invalid email! Please check the Email" );
     }
   };
 
@@ -96,9 +87,22 @@ const ForgotPassword = (props) => {
       ) : null}
 
       <View style={styles.backContainer}>
-        <TouchableOpacity onPress={() => props.navigation.replace("LoginScreen")}>
+        <TouchableOpacity onPress={() => navigation.replace("LoginScreen")}>
           <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
+
+        {/* <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
+        <Text style={styles.loginText}>Already have an Account? <Text style={styles.loginText1}>Login</Text></Text>
+          
+
+        </TouchableOpacity> */}
+
+
+        {/* <TouchableOpacity onPress={() => navigation.replace('resetpassword')}>
+        <Text style={styles.loginText}> Please Change your Password here <Text style={styles.loginText1}>ResetPassword</Text></Text>
+          
+
+        </TouchableOpacity> */}
       </View>
     </View>
   );

@@ -13,11 +13,13 @@ import Footer from "./Footer";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { API } from "./config";
+import { usebookingDetails } from "./Context/bookingDetailsContext";
 
 const Map = (props) => {
-  console.log(props.email)
+
   const route = useRoute();
-  const  email  = props.email;
+  const {email,locationSetter}=usebookingDetails()
+ 
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 49.488888,
@@ -31,11 +33,8 @@ const Map = (props) => {
   const [additionalMarkers, setAdditionalMarkers] = useState([]);
 
   const handleParkingLotPress = (marker) => {
-    navigation.navigate("homepage", {
-      email: email,
-      location: marker.name,
-    });
-  };
+locationSetter(marker.name)
+    navigation.navigate("bookslot") };
 
   const userLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();

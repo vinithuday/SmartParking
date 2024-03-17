@@ -5,20 +5,17 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Header from './Header';
 import Footer from './Footer';
 import { API } from './config';
-
+import { usebookingDetails } from './Context/bookingDetailsContext'
 const Payment = ({ route  }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [paymentIntentClientSecret, setPaymentIntentClientSecret] = useState('');
   const navigation = useNavigation();
-  const { chosenDate, arrivalTime, departureTime, totalPrice, email, location   ,selectedSlot, } = route.params;
+  // const { arrivalDateTime, departureTime, totalPrice, email, location   ,selectedSlot, } = usebookingDetails();
 
   const confirmHandler = async (paymentMethod, shouldSavePaymentMethod, intentCreationCallback) => {
-    // Make a request to your own server, passing paymentMethod.id and shouldSavePaymentMethod.
-    // Your server creates a PaymentIntent and returns its client secret or an error message
     const myServerResponse = await fetch(API.paymentSheet);
-    // Call the `intentCreationCallback` with the client secret or error
-    const { clientSecret, error } = await myServerResponse.json();  // Change 'response' to 'myServerResponse'
+    const { clientSecret, error } = await myServerResponse.json();  
     if (clientSecret) {
         intentCreationCallback({ clientSecret });
     } else {
@@ -65,14 +62,13 @@ const Payment = ({ route  }) => {
           amount: 1099,
           currencyCode: 'USD',
         },
-        confirmHandler: confirmHandler, // Corrected function reference
+        confirmHandler: confirmHandler, 
       },
     });
 
     if (error) {
       console.error('Error initializing payment sheet:', error);
     }
-    // Update your UI with paymentOption
   };
 
   const openPaymentSheet = async () => {
@@ -80,14 +76,10 @@ const Payment = ({ route  }) => {
 
     if (error) {
       if (error.code === PaymentSheetError.Canceled) {
-        // Customer canceled - you should probably do nothing.
       } else {
-        // PaymentSheet encountered an unrecoverable error.
         console.error('PaymentSheet error:', error);
-        // You can display the error to the user, log it, etc.
       }
     } else {
-      // Payment completed - show a confirmation screen.
       console.log('Payment completed successfully');
     }
   };
@@ -105,15 +97,8 @@ const Payment = ({ route  }) => {
   });
 
   const handlePaymentSuccess = () => {
-    // Redirect to QrCode and pass reservation details
-    navigation.replace('qrcode', {
-      qrData: { chosenDate, arrivalTime, departureTime, totalPrice, email, location,selectedSlot, 
- },
- 
-    });
-    
-  };
-
+    navigation.replace('qrcode');
+  }
   return (
     <View style={styles.container}>
 

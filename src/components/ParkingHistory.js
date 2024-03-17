@@ -4,13 +4,16 @@ import Header from './Header';
 import Footer from './Footer';
 import axios from 'axios';
 import { API } from './config';
+
+
 const ParkingHistoryScreen = () => {
   const [parkingHistory, setParkingHistory] = useState([]);
 
   useEffect(() => {
     const fetchParkingHistory = async () => {
       try {
-        const response = await axios.post(API.userReservation,{email});
+        const response = await axios.get(API.userReservation);
+        console.log(response)
 
 
         if (!response.ok) {
