@@ -1,16 +1,20 @@
-import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import Header from './Header';
-import Footer from './Footer';
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const ContactUs = () => {
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [message, setMessage] = React.useState('');
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
 
-  const handleSendMessage = () => {
-
-  };
+  const handleSendMessage = () => {};
 
   return (
     <View style={styles.container}>
@@ -19,10 +23,10 @@ const ContactUs = () => {
 
       <View style={styles.cardContainer}>
         <Text style={styles.policyText}>
-        Welcome to Smart Parking!{'\n'}
-      If you're facing any issues or have questions,{'\n'}
-      please feel free to reach out to us.{'\n'}
-      We'll get back to you as soon as possible.
+          Welcome to Smart Parking!{"\n"}
+          If you're facing any issues or have questions,{"\n"}
+          please feel free to reach out to us.{"\n"}
+          We'll get back to you as soon as possible.
         </Text>
       </View>
 
@@ -60,31 +64,31 @@ const ContactUs = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffff',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffff",
   },
   cardContainer: {
-    backgroundColor: '#ddd',
+    backgroundColor: "#ddd",
     borderRadius: 10,
     padding: 30,
     bottom: 150,
-    width: '80%',
+    width: "80%",
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-    justifyContent: 'center',
-    color: '#4595E0',
-    bottom: 190, 
+    fontWeight: "bold",
+    justifyContent: "center",
+    color: "#4595E0",
+    bottom: 190,
   },
   formContainer: {
-    width: '80%',
+    width: "80%",
     bottom: 120,
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     marginBottom: 20,
     padding: 10,
@@ -92,27 +96,27 @@ const styles = StyleSheet.create({
   },
   messageInput: {
     height: 100,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     marginBottom: 20,
     padding: 10,
     borderRadius: 5,
-    textAlignVertical: 'top', 
+    textAlignVertical: "top",
   },
   sendButton: {
-    backgroundColor: '#4595E0',
+    backgroundColor: "#4595E0",
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   sendButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 16,
   },
   policyText: {
     fontSize: 14,
-    color: '#38447E',
+    color: "#38447E",
   },
 });
 

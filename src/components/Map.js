@@ -16,10 +16,8 @@ import { API } from "./config";
 import { usebookingDetails } from "./Context/bookingDetailsContext";
 
 const Map = (props) => {
-
   const route = useRoute();
-  const {email,locationSetter}=usebookingDetails()
- 
+  const { email, locationSetter } = usebookingDetails();
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 49.488888,
@@ -33,8 +31,9 @@ const Map = (props) => {
   const [additionalMarkers, setAdditionalMarkers] = useState([]);
 
   const handleParkingLotPress = (marker) => {
-locationSetter(marker.name)
-    navigation.navigate("bookslot") };
+    locationSetter(marker.name);
+    navigation.navigate("bookslot");
+  };
 
   const userLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();

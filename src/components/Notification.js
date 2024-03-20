@@ -1,23 +1,29 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import Header from './Header';
-import Footer from './Footer';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
+import Header from "./Header";
+import Footer from "./Footer";
+import { useNavigation } from "@react-navigation/native";
 
 const Notification = () => {
   const navigation = useNavigation();
   const bounceValue = useRef(new Animated.Value(0)).current;
 
   const handleRemindersPress = () => {
-    navigation.navigate('settings');
+    navigation.navigate("settings");
   };
 
   const handleMessagesPress = () => {
-    navigation.navigate('settings');
+    navigation.navigate("settings");
   };
 
   useEffect(() => {
-
     Animated.spring(bounceValue, {
       toValue: 1,
       friction: 3,
@@ -31,10 +37,10 @@ const Notification = () => {
       <Text style={styles.notificationName}> Notifications</Text>
       <View style={styles.row}>
         <TouchableOpacity onPress={handleRemindersPress}>
-        <View style={styles.card}>
+          <View style={styles.card}>
             <View style={styles.userProfileIcon}>
               <Image
-                source={require('../../assets/notification.png')}
+                source={require("../../assets/notification.png")}
                 style={{ width: 35, height: 35 }}
               />
               <Text style={styles.userProfileText}>Reminders </Text>
@@ -43,10 +49,10 @@ const Notification = () => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleMessagesPress}>
-        <View style={styles.card}>
+          <View style={styles.card}>
             <View style={styles.userProfileIcon}>
               <Image
-                source={require('../../assets/Messages.png')}
+                source={require("../../assets/Messages.png")}
                 style={{ width: 35, height: 35 }}
               />
               <Text style={styles.userProfileText}> Messages </Text>
@@ -56,7 +62,7 @@ const Notification = () => {
       </View>
 
       <Animated.Image
-        source={require('../../assets/NotificationCar.png')}
+        source={require("../../assets/NotificationCar.png")}
         style={[styles.logo, { transform: [{ scale: bounceValue }] }]}
       />
 
@@ -68,47 +74,47 @@ const Notification = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   squareone: {
-    backgroundColor: '#ffff',
+    backgroundColor: "#ffff",
     width: 170,
     height: 170,
     margin: 10,
-    borderColor: 'rgba(128, 128, 128, 0.5)',
+    borderColor: "rgba(128, 128, 128, 0.5)",
     borderWidth: 1,
     borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     top: 350,
   },
   userProfileText: {
     marginLeft: 5,
     marginTop: 10,
     fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   notificationName: {
     fontSize: 20,
-    fontWeight: 'bold',
-    justifyContent: 'center',
+    fontWeight: "bold",
+    justifyContent: "center",
     bottom: 70,
-    color: '#4595E0',
+    color: "#4595E0",
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     width: 170,
     height: 170,
     margin: 10,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -119,17 +125,16 @@ const styles = StyleSheet.create({
   },
   logo: {
     top: 100,
-    // left: 10,
     width: 250,
     height: 350,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   userProfileIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

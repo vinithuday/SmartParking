@@ -7,11 +7,9 @@ const ReferFriendScreen = () => {
   const [friendEmail, setFriendEmail] = useState('');
 
   const handleReferFriend = () => {
-    // Simple example: Check if the email is valid
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (emailRegex.test(friendEmail)) {
       Alert.alert('Success', `Your friend (${friendEmail}) has been referred!`);
-      // You can implement the logic to send referral details or perform any other action here
     } else {
       Alert.alert('Error', 'Please enter a valid email address.');
     }

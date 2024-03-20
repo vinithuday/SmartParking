@@ -1,32 +1,38 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import Header from './Header';
-import Footer from './Footer';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
+import Header from "./Header";
+import Footer from "./Footer";
+import { useNavigation } from "@react-navigation/native";
 
 const Menu = () => {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
-  const handleNumberPlatePress =() => {
-    navigation.navigate('numberplate');
-  }
-  
-  const handleContactUSPress =() => {
-    navigation.navigate('contactus');
-  }
+  const handleNumberPlatePress = () => {
+    navigation.navigate("numberplate");
+  };
+
+  const handleContactUSPress = () => {
+    navigation.navigate("contactus");
+  };
 
   const handleFAQsPress = () => {
-    navigation.navigate('faqs');
+    navigation.navigate("faqs");
   };
 
   const handleReferAFriendPress = () => {
-    navigation.navigate('referfriendscreen');
+    navigation.navigate("referfriendscreen");
   };
 
   useEffect(() => {
-    // Opacity animation
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 2000,
@@ -36,16 +42,15 @@ const Menu = () => {
     Animated.loop(
       Animated.timing(rotateAnim, {
         toValue: 1,
-        duration: 5000, 
+        duration: 5000,
         useNativeDriver: true,
       })
     ).start();
   }, [fadeAnim, rotateAnim]);
 
-  // Map the animated value to rotation
   const wheelRotation = rotateAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
+    outputRange: ["0deg", "360deg"],
   });
 
   return (
@@ -58,7 +63,7 @@ const Menu = () => {
           <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.userProfileIcon}>
               <Image
-                source={require('../../assets/numberPlate.png')}
+                source={require("../../assets/numberPlate.png")}
                 style={{ width: 30, height: 30 }}
               />
               <Text style={styles.userProfileText}>Enter Number plate </Text>
@@ -70,7 +75,7 @@ const Menu = () => {
           <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.userProfileIcon}>
               <Image
-                source={require('../../assets/contactUs.png')}
+                source={require("../../assets/contactUs.png")}
                 style={{ width: 30, height: 30 }}
               />
               <Text style={styles.userProfileText}> Contact Us </Text>
@@ -84,7 +89,7 @@ const Menu = () => {
           <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.userProfileIcon}>
               <Image
-                source={require('../../assets/notification.png')}
+                source={require("../../assets/notification.png")}
                 style={{ width: 30, height: 30 }}
               />
               <Text style={styles.userProfileText}>FAQ's </Text>
@@ -96,7 +101,7 @@ const Menu = () => {
           <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.userProfileIcon}>
               <Image
-                source={require('../../assets/Messages.png')}
+                source={require("../../assets/Messages.png")}
                 style={{ width: 30, height: 30 }}
               />
               <Text style={styles.userProfileText}> Refer a Friend </Text>
@@ -106,8 +111,11 @@ const Menu = () => {
       </View>
 
       <Animated.Image
-        source={require('../../assets/wheel.png')}
-        style={[styles.logo, { opacity: fadeAnim, transform: [{ rotate: wheelRotation }] }]}
+        source={require("../../assets/wheel.png")}
+        style={[
+          styles.logo,
+          { opacity: fadeAnim, transform: [{ rotate: wheelRotation }] },
+        ]}
       />
 
       <Footer />
@@ -118,21 +126,21 @@ const Menu = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#ffff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     width: 170,
     height: 170,
     margin: 10,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
     borderRadius: 10,
-    justifyContent: 'center',
+    justifyContent: "center",
     top: 30,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -143,8 +151,8 @@ const styles = StyleSheet.create({
   },
 
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   logo: {
     top: 60,
@@ -156,17 +164,17 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginTop: 10,
     fontSize: 12,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   userProfileIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   menuName: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#4595E0',
+    fontWeight: "bold",
+    color: "#4595E0",
   },
 });
 

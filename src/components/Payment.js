@@ -1,32 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
-import { useStripe, CardField, PaymentSheetError } from '@stripe/stripe-react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import Header from './Header';
-import Footer from './Footer';
-import { API } from './config';
-import { usebookingDetails } from './Context/bookingDetailsContext'
-const Payment = ({ route  }) => {
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
+import {
+  useStripe,
+  CardField,
+  PaymentSheetError,
+} from "@stripe/stripe-react-native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import Header from "./Header";
+import Footer from "./Footer";
+import { API } from "./config";
+import { usebookingDetails } from "./Context/bookingDetailsContext";
+const Payment = ({ route }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
-  const [paymentIntentClientSecret, setPaymentIntentClientSecret] = useState('');
+  const [paymentIntentClientSecret, setPaymentIntentClientSecret] =
+    useState("");
   const navigation = useNavigation();
   // const { arrivalDateTime, departureTime, totalPrice, email, location   ,selectedSlot, } = usebookingDetails();
 
-  const confirmHandler = async (paymentMethod, shouldSavePaymentMethod, intentCreationCallback) => {
+  const confirmHandler = async (
+    paymentMethod,
+    shouldSavePaymentMethod,
+    intentCreationCallback
+  ) => {
     const myServerResponse = await fetch(API.paymentSheet);
-    const { clientSecret, error } = await myServerResponse.json();  
+    const { clientSecret, error } = await myServerResponse.json();
     if (clientSecret) {
-        intentCreationCallback({ clientSecret });
+      intentCreationCallback({ clientSecret });
     } else {
-        intentCreationCallback({ error });
+      intentCreationCallback({ error });
     }
-};
-
+  };
 
   const handleQRCodePress = () => {
     // console.log(chosenDate, arrivalTime, departureTime, totalPrice);
-
     // if (!chosenDate || arrivalTime === "" || departureTime === "") {
     //   Alert.alert(
     //     "Validation Error",
@@ -52,7 +59,6 @@ const Payment = ({ route  }) => {
     // }
   };
 
-
   const initializePaymentSheet = async () => {
     const { error, paymentOption } = await initPaymentSheet({
       merchantDisplayName: "Example, Inc.",
@@ -60,14 +66,14 @@ const Payment = ({ route  }) => {
       intentConfiguration: {
         mode: {
           amount: 1099,
-          currencyCode: 'USD',
+          currencyCode: "USD",
         },
-        confirmHandler: confirmHandler, 
+        confirmHandler: confirmHandler,
       },
     });
 
     if (error) {
-      console.error('Error initializing payment sheet:', error);
+      console.error("Error initializing payment sheet:", error);
     }
   };
 
@@ -77,10 +83,10 @@ const Payment = ({ route  }) => {
     if (error) {
       if (error.code === PaymentSheetError.Canceled) {
       } else {
-        console.error('PaymentSheet error:', error);
+        console.error("PaymentSheet error:", error);
       }
     } else {
-      console.log('Payment completed successfully');
+      console.log("Payment completed successfully");
     }
   };
   const initializeAndPresentPaymentSheet = async () => {
@@ -88,7 +94,7 @@ const Payment = ({ route  }) => {
       await initializePaymentSheet();
       await openPaymentSheet();
     } catch (error) {
-      console.error('Error initializing or presenting payment sheet:', error);
+      console.error("Error initializing or presenting payment sheet:", error);
     }
   };
 
@@ -97,37 +103,36 @@ const Payment = ({ route  }) => {
   });
 
   const handlePaymentSuccess = () => {
-    navigation.replace('qrcode');
-  }
+    navigation.replace("qrcode");
+  };
   return (
     <View style={styles.container}>
-
       <View style={styles.paymentContainer}>
-      <Header />
+        <Header />
         <CardField
           postalCodeEnabled={true}
           placeholders={{
-            number: '4242 4242 4242 4242',
+            number: "4242 4242 4242 4242",
           }}
           cardStyle={{
-            backgroundColor: '#FFFFFF',
-            textColor: '#000000',
+            backgroundColor: "#FFFFFF",
+            textColor: "#000000",
             borderWidth: 1,
-            borderColor: '#38447E',
+            borderColor: "#38447E",
           }}
           style={{
-            width: '90%',
+            width: "90%",
             height: 100,
             marginVertical: 60,
           }}
         />
-       <TouchableOpacity style={styles.button} onPress={handlePaymentSuccess}>
-        <Text style={styles.buttonText}>Pay</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handlePaymentSuccess}>
+          <Text style={styles.buttonText}>Pay</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('paypalscreen')}
+          onPress={() => navigation.navigate("paypalscreen")}
         >
           <Text style={styles.buttonText}>Pay with PayPal</Text>
         </TouchableOpacity>
@@ -141,38 +146,37 @@ const Payment = ({ route  }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
+    flexDirection: "column",
     flex: 1,
-    backgroundColor: '#ffff',
+    backgroundColor: "#ffff",
   },
   footer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   paymentContainer: {
     flex: 1,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
   },
   button: {
-    backgroundColor: '#4595E0',
+    backgroundColor: "#4595E0",
     padding: 10,
     borderRadius: 5,
-    alignItems: 'center',
-    width: '70%',
+    alignItems: "center",
+    width: "70%",
     height: 50,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: 10,
     borderWidth: 1,
-    borderColor: '#38447E',
+    borderColor: "#38447E",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
   },
 });
 
 export default Payment;
-

@@ -4,52 +4,51 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
 import Footer from "./Footer";
 import { useRoute } from "@react-navigation/native";
-import {usebookingDetails } from "./Context/bookingDetailsContext";
+import { usebookingDetails } from "./Context/bookingDetailsContext";
 import { API } from "./config";
 const Homepage = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { location,arrivalDateTime,departureTime,selectedSlotSetter } =usebookingDetails();
+  const { location, arrivalDateTime, departureTime, selectedSlotSetter } =
+    usebookingDetails();
 
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
-  const [blockedSlots,setBlockedSlots]=useState(new Map())
+  const [blockedSlots, setBlockedSlots] = useState(new Map());
   const handleBookSlotPress = (slot, event) => {
-    // event.persist();
-    selectedSlotSetter(slot)
+    selectedSlotSetter(slot);
     navigation.navigate("Payment");
   };
-useEffect(()=>{
-  (async()=>{
-    try {
-      const response = await fetch(API.checkAvailableSlot, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({location,arrivalDateTime,departureTime}),
-      });
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await fetch(API.checkAvailableSlot, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ location, arrivalDateTime, departureTime }),
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      let blockedSlotsIn=result.data
-      console.log(blockedSlotsIn)
-      const newBlockedSlotMap=new Map();
+        let blockedSlotsIn = result.data;
+        console.log(blockedSlotsIn);
+        const newBlockedSlotMap = new Map();
 
-      for(let i=0;i<blockedSlotsIn.length;i++){
-        newBlockedSlotMap.set(blockedSlotsIn[i],true)
+        for (let i = 0; i < blockedSlotsIn.length; i++) {
+          newBlockedSlotMap.set(blockedSlotsIn[i], true);
+        }
+        setBlockedSlots(newBlockedSlotMap);
+        console.log(newBlockedSlotMap);
+      } catch (error) {
+        console.error("Error sending reservation details to backend:", error);
       }
-      setBlockedSlots(newBlockedSlotMap)
-      console.log(newBlockedSlotMap)
-    } catch (error) {
-      console.error("Error sending reservation details to backend:", error);
-    }
-  })()
-
-},[])
-useEffect(()=>{
-console.log("change")
-},[blockedSlots])
+    })();
+  }, []);
+  useEffect(() => {
+    console.log("change");
+  }, [blockedSlots]);
 
   const renderSlot = (row, col) => {
     const levelStart =
@@ -62,9 +61,11 @@ console.log("change")
         disabled={blockedSlots.has(slotName)}
         onPress={(event) => handleBookSlotPress(slotName, event)}
       >
-        <View style={
-          blockedSlots.has(slotName)?styles.blockedSquare:
-          styles.squareone}>
+        <View
+          style={
+            blockedSlots.has(slotName) ? styles.blockedSquare : styles.squareone
+          }
+        >
           <View style={styles.carIcon}>
             <Image
               source={require("../../assets/car1.png")}
@@ -82,7 +83,7 @@ console.log("change")
     for (let i = 0; i < 4; i++) {
       rows.push(
         <View key={i} style={styles.row}>
-          {Array.from({ length:4  }, (_, index) => renderSlot(i, index))}
+          {Array.from({ length: 4 }, (_, index) => renderSlot(i, index))}
         </View>
       );
     }
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     top: 20,
   },
-  blockedSquare:{
+  blockedSquare: {
     width: 90,
     height: 90,
     marginTop: 10,
@@ -187,8 +188,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 4,
     top: 20,
-    backgroundColor:"grey",
-    borderBlockColor:"black"
+    backgroundColor: "grey",
+    borderBlockColor: "black",
   },
 
   carIcon: {
@@ -197,7 +198,6 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    // bottom: 200,
   },
   slotText: {
     fontSize: 14,

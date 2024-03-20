@@ -11,7 +11,7 @@
 // userReservation:  "http://172.21.146.218:3000/api/userReservation",
 // bookSlot:  "http://172.21.146.218:3000/api/bookSlot",
 // jwtAuth:  "http://172.21.146.218:3000/initJwtAuth",
-// getParkingHistory:  "http://192.168.0.28:3000/api/getParkingHistory",
+// getParkingHistory:  "http://192.168.0.28:3000/getParkingHistory",
 // }
 
 
@@ -28,7 +28,8 @@ userReservation:  "http://192.168.0.28:3000/api/userReservation",
 bookSlot:  "http://192.168.0.28:3000/api/bookSlot",
 jwtAuth:  "http://192.168.0.28:3000/initJwtAuth",
 checkAvailableSlot:  "http://192.168.0.28:3000/checkAvailableSlot",
-getParkingHistory:  "http://192.168.0.28:3000/api/getParkingHistory",
+
+getParkingHistory:  "http://192.168.0.28:3000/parkingHistory",
 }
 
 

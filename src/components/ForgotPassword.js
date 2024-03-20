@@ -1,4 +1,4 @@
-import React, {  useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,24 +6,22 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  Animated, 
+  Animated,
   StatusBar,
 } from "react-native";
-import { API } from './config';
+import { API } from "./config";
 import axios from "axios";
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation } from "@react-navigation/native";
 
 const ForgotPassword = (props) => {
-  const [email, setEmail] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const navigation = useNavigation();
 
   const carPosition = useRef(new Animated.Value(0)).current;
 
-  
   useEffect(() => {
     Animated.timing(carPosition, {
       toValue: 1100,
@@ -36,19 +34,15 @@ const ForgotPassword = (props) => {
     try {
       const trimmedEmail = email.trim();
       const response = await axios.post(API.forgotpassword, {
-        email: trimmedEmail 
+        email: trimmedEmail,
       });
-      if (!response.status===200) {
-        console.log(response.message)
-  
-    
-  
+      if (!response.status === 200) {
+        console.log(response.message);
       } else {
-        console.log(response.data)
+        console.log(response.data);
       }
     } catch (error) {
-
-      Alert.alert("Invalid email! Please check the Email" );
+      Alert.alert("Invalid email! Please check the Email");
     }
   };
 
@@ -58,11 +52,10 @@ const ForgotPassword = (props) => {
       <Text style={styles.signupheadingText}>Forgot your Password?</Text>
       <Text style={styles.signupheading1Text}>Don't Worry!</Text>
 
-
       <Animated.Image
-      source={require('../../assets/car1.png')}
-      style={[styles.logo, { transform: [{ translateX: carPosition }] }]}
-    />
+        source={require("../../assets/car1.png")}
+        style={[styles.logo, { transform: [{ translateX: carPosition }] }]}
+      />
       <Text style={styles.Text}>Please Enter your Email Id</Text>
 
       <View style={styles.inputView}>
@@ -74,7 +67,10 @@ const ForgotPassword = (props) => {
         />
       </View>
 
-      <TouchableOpacity style={styles.emailButton} onPress={handleForgotPassword}>
+      <TouchableOpacity
+        style={styles.emailButton}
+        onPress={handleForgotPassword}
+      >
         <Text style={styles.emailText}>SEND EMAIL</Text>
       </TouchableOpacity>
 
@@ -90,26 +86,10 @@ const ForgotPassword = (props) => {
         <TouchableOpacity onPress={() => navigation.replace("LoginScreen")}>
           <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
-        <Text style={styles.loginText}>Already have an Account? <Text style={styles.loginText1}>Login</Text></Text>
-          
-
-        </TouchableOpacity> */}
-
-
-        {/* <TouchableOpacity onPress={() => navigation.replace('resetpassword')}>
-        <Text style={styles.loginText}> Please Change your Password here <Text style={styles.loginText1}>ResetPassword</Text></Text>
-          
-
-        </TouchableOpacity> */}
       </View>
     </View>
   );
 };
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -123,8 +103,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 420, 
-    height: 195, 
+    width: 420,
+    height: 195,
     bottom: 30,
     right: 400,
   },
@@ -152,8 +132,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     fontSize: 15,
     fontStyle: "italic",
-    textDecorationLine: 'underline' ,
-    color: '#38447E',
+    textDecorationLine: "underline",
+    color: "#38447E",
   },
   emailButton: {
     width: "70%",
@@ -162,41 +142,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#4595E0",
-  bottom:20,
+    bottom: 20,
   },
   emailText: {
     color: "white",
   },
   backContainer: {
-    width: '100%',
-    alignItems: 'center', 
-   bottom:  1,
+    width: "100%",
+    alignItems: "center",
+    bottom: 1,
   },
   backText: {
-    color: '#38447E',
+    color: "#38447E",
     fontSize: 15,
-    textDecorationLine: 'underline' ,
+    textDecorationLine: "underline",
   },
-  signupheadingText:{
-    fontSize:30,
+  signupheadingText: {
+    fontSize: 30,
     right: 55,
-    bottom:50,
-    fontWeight: 'bold',
-    
-
+    bottom: 50,
+    fontWeight: "bold",
   },
-  signupheading1Text:{
-    fontSize:40,
+  signupheading1Text: {
+    fontSize: 40,
     right: 105,
     bottom: 40,
-    fontWeight: 'bold',
-    // color: '#38447E',
-    color: '#4595E0',
-
+    fontWeight: "bold",
+    color: "#4595E0",
   },
   successText: {
-    color: 'green',
-    marginTop: 10,
+    bottom: 180,
+    fontSize: 15,
   },
 });
 

@@ -7,12 +7,17 @@ import { API } from "./config";
 import { usebookingDetails } from "./Context/bookingDetailsContext";
 const QrCode = () => {
   const [qrValue, setQrValue] = useState("");
-  // const { qrData } = route.params;
-  const {  arrivalDateTime, departureTime, email, location, totalPrice, selectedSlot } = usebookingDetails();
-  
+  const {
+    arrivalDateTime,
+    departureTime,
+    email,
+    location,
+    totalPrice,
+    selectedSlot,
+  } = usebookingDetails();
+
   useEffect(() => {
     generateAndSetQrCodeValue();
-
   }, []);
 
   const generateAndSetQrCodeValue = () => {
@@ -48,15 +53,11 @@ const QrCode = () => {
       });
 
       const result = await response.json();
-
-
     } catch (error) {
       console.error("Error sending reservation details to backend:", error);
     }
   };
 
-
-    
   return (
     <View style={styles.container}>
       <Header />
@@ -77,17 +78,19 @@ const QrCode = () => {
       ) : (
         <Text>Loading QR code...</Text>
       )}
-           <View style={styles.cardContainer}>
-        <Text style={styles.cardTitle}>Thank you for choosing Smart Parking</Text>
+      <View style={styles.cardContainer}>
+        <Text style={styles.cardTitle}>
+          Thank you for choosing Smart Parking
+        </Text>
         <Text style={styles.cardContent}>
-  Thank you for choosing Smart Parking!{"\n"}
-  We appreciate your trust in our parking service.{"\n"}
-  If you have any questions or need assistance, feel free to ask our staff.{"\n"}
-  We hope you have a wonderful day!
-</Text>
+          Thank you for choosing Smart Parking!{"\n"}
+          We appreciate your trust in our parking service.{"\n"}
+          If you have any questions or need assistance, feel free to ask our
+          staff.{"\n"}
+          We hope you have a wonderful day!
+        </Text>
       </View>
       <Footer />
-
     </View>
   );
 };
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     padding: 50,
-    borderRadius: 10, 
+    borderRadius: 10,
   },
   cardContainer: {
     backgroundColor: "#ddd",
@@ -135,9 +138,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#38447E",
   },
-  signupText:{
+  signupText: {
     color: "#ffff",
-  }
+  },
 });
 
 export default QrCode;

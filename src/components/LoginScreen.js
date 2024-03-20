@@ -1,25 +1,31 @@
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  StatusBar,
+  Alert,
+  Animated,
+} from "react-native";
+import axios from "axios";
+import { API } from "./config";
+import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import { usebookingDetails } from "./Context/bookingDetailsContext";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar, Alert, Animated } from 'react-native';
-import axios from 'axios';
-import { API } from './config';
-import { useNavigation } from '@react-navigation/native';
-import * as SecureStore from 'expo-secure-store';
-import { usebookingDetails } from './Context/bookingDetailsContext';
-
-
-const LoginScreen=(props) =>{
-  // const [email1, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const LoginScreen = (props) => {
+  const [password, setPassword] = useState("");
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [enteredEmail,setEnteredEmail]=useState("")
-  const {email,emailSetter}=usebookingDetails()
-  
+  const [enteredEmail, setEnteredEmail] = useState("");
+  const { email, emailSetter } = usebookingDetails();
+
   const carPosition = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-
     Animated.timing(carPosition, {
       toValue: 1500,
       duration: 9000,
@@ -29,40 +35,43 @@ const LoginScreen=(props) =>{
 
   const saveJwtToken = async (token) => {
     try {
-      await SecureStore.setItemAsync('jwtToken', token);
-    
-      console.log('JWT token saved successfully');
+      await SecureStore.setItemAsync("jwtToken", token);
+
+      console.log("JWT token saved successfully");
     } catch (error) {
-      console.error('Error saving JWT token:', error);
+      console.error("Error saving JWT token:", error);
     }
   };
 
   const handleLogin = async () => {
     if (!enteredEmail || !password) {
-      Alert.alert('Error', 'Please fill in all the details-----.');
+      Alert.alert("Error", "Please fill in all the details.");
       return;
     }
 
     try {
-      setLoading(true); 
+      setLoading(true);
       const response = await axios.post(API.login, {
-        email:enteredEmail,
+        email: enteredEmail,
         password,
       });
 
       if (response.data.message) {
         saveJwtToken(response.data.data);
-        let email= response.data.email
+        let email = response.data.email;
 
-      props.setIsLoggedIn(response.data.hasOwnProperty("email"))
-      emailSetter(email)
-      console.log("login done "+email)
+        props.setIsLoggedIn(response.data.hasOwnProperty("email"));
+        emailSetter(email);
+        console.log("login done " + email);
       } else {
-        Alert.alert('Errorr', 'Invalid login credentials. Please check your email and password.');
+        Alert.alert(
+          "Errorr",
+          "Invalid login credentials. Please check your email and password."
+        );
       }
     } catch (error) {
-      console.error('Login failed:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      console.error("Login failed:", error);
+      Alert.alert("Error", "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -72,11 +81,10 @@ const LoginScreen=(props) =>{
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Animated.Image
-        source={require('../../assets/LoginCar.png')}
+        source={require("../../assets/LoginCar.png")}
         style={[styles.logo, { transform: [{ translateY: carPosition }] }]}
       />
-    
-  
+
       <View style={styles.overlayContainer}>
         <View style={styles.logoContainer}>
           <Text style={styles.signupheadingText}>Login To Your </Text>
@@ -100,15 +108,24 @@ const LoginScreen=(props) =>{
             onChangeText={(text) => setPassword(text)}
           />
 
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.passwordToggleBtn}>
+          <TouchableOpacity
+            onPress={() => setShowPassword(!showPassword)}
+            style={styles.passwordToggleBtn}
+          >
             <Image
-              source={showPassword ? require('../../assets/Passwordseen.png') : require('../../assets/password2.png')}
+              source={
+                showPassword
+                  ? require("../../assets/Passwordseen.png")
+                  : require("../../assets/password2.png")
+              }
               style={styles.passwordlogo}
             />
           </TouchableOpacity>
 
           <View style={styles.forgotButtonContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('forgotpassword')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("forgotpassword")}
+            >
               <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
@@ -122,33 +139,35 @@ const LoginScreen=(props) =>{
           <Text style={styles.orText}>---------------OR---------------</Text>
         </View>
 
-        <TouchableOpacity style={styles.signupBtn} onPress={() => navigation.navigate('signup')}>
+        <TouchableOpacity
+          style={styles.signupBtn}
+          onPress={() => navigation.navigate("signup")}
+        >
           <Text style={styles.signupText}>SIGN UP </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-}
-
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   overlayContainer: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
     bottom: 280,
   },
   logoContainer: {
     marginBottom: 60,
-    alignItems: 'center',
+    alignItems: "center",
   },
-  road:{
+  road: {
     height: 680,
     width: 350,
     top: 610,
@@ -160,9 +179,9 @@ const styles = StyleSheet.create({
   },
   inputView: {
     borderRadius: 30,
-    width: '70%',
+    width: "70%",
     bottom: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   passwordlogo: {
     width: 25,
@@ -172,72 +191,72 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 50,
-    width: '100%',
-    borderColor: 'gray',
+    width: "100%",
+    borderColor: "gray",
     borderWidth: 1,
     borderRadius: 10,
     paddingLeft: 10,
     marginVertical: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   forgotButtonContainer: {
-    width: '100%',
-    alignItems: 'flex-end',
+    width: "100%",
+    alignItems: "flex-end",
     top: 10,
   },
   forgotText: {
-    color: '#38447E',
+    color: "#38447E",
     fontSize: 15,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
   },
   orContainer: {
     marginVertical: 10,
     top: 30,
   },
   orText: {
-    color: '#38447E',
+    color: "#38447E",
     fontSize: 15,
   },
   loginBtn: {
-    width: '70%',
+    width: "70%",
     borderRadius: 12,
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     top: 20,
-    backgroundColor: '#4595E0',
+    backgroundColor: "#4595E0",
   },
   loginText: {
-    color: 'white',
+    color: "white",
   },
   signupBtn: {
-    width: '70%',
+    width: "70%",
     borderRadius: 12,
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 40,
-    backgroundColor: '#4595E0',
+    backgroundColor: "#4595E0",
   },
   signupText: {
-    color: 'white',
+    color: "white",
   },
   signupheadingText: {
     fontSize: 40,
     right: 70,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     bottom: 20,
-    color: '#4595E0',
+    color: "#4595E0",
   },
   signupheading2Text: {
     fontSize: 40,
     right: 120,
     bottom: 25,
-    fontWeight: 'bold',
-    color: '#464646',
+    fontWeight: "bold",
+    color: "#464646",
   },
   passwordToggleBtn: {
-    position: 'absolute',
+    position: "absolute",
     top: 130,
   },
 });
