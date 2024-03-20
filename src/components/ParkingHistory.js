@@ -34,12 +34,12 @@ const ParkingHistoryScreen = () => {
     <View style={styles.cardContainer}> 
       {parkingHistory.map((historyItem, index) => (
         <View key={index} style={styles.card}>
-          <Text>Email: {historyItem.email}</Text>
-          <Text>Location: {historyItem.location}</Text>
-          <Text>Arrival Time: {historyItem.arrivalDateTime}</Text>
-          <Text>Departure Time: {historyItem.departureTime}</Text>
-          <Text>Selected Slot: {historyItem.selectedSlot}</Text>
-          <Text>Total Price: {historyItem.totalPrice}</Text>
+          <Text style={{ color: '#38447E' }}>Email: {historyItem.email}</Text>
+          <Text style={{ color: '#38447E' }}>Location: {historyItem.location}</Text>
+          <Text style={{ color: '#38447E' }}>Arrival Time: {historyItem.arrivalDateTime}</Text>
+          <Text style={{ color: '#38447E' }}>Departure Time: {historyItem.departureTime}</Text>
+          <Text style={{ color: '#38447E' }}>Selected Slot: {historyItem.selectedSlot}</Text>
+          <Text style={{ color: '#38447E' }}>Total Price: {historyItem.totalPrice}</Text>
         </View>
       ))}
       </View>
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    
   },
   cardText: {
     fontSize: 16,
